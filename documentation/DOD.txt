@@ -1,6 +1,6 @@
-Une tiket est considérée comme "FAIT" quand :
+Un ticket est considéré comme "FAIT" quand :
 ✅ Le code est écrit et fait ce qui est demandé
 ✅ Le code fonctionne sans erreur dans la console
-✅ Ça a été testé manuellement par le développeur
+✅ La fonctionnalité a été testée manuellement par le développeur
 ✅ Le code est poussé sur le repository Git
-✅ La fonctionnalité est validé par le Product Owner
+✅ La fonctionnalité est validée par le Product Owner
