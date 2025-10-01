@@ -1,17 +1,55 @@
 // Créer un synthétiseur piano
 const synth = new Tone.Synth().toDestination();
 
+function importFile() {
+  const file = document.getElementById("musicFile");
+  const fileImported = file.files[0];
+  console.log(file);
+  console.log(fileImported.value);
 
-const instrumentButtons = document.querySelectorAll('.instrument-btn');
-let currentInstrument = 'piano';
+  const reader = new FileReader();
+
+  reader.onload = (event) => {
+    const content = event.target.result;
+    console.log(convertTxtToMusic(content));
+  };
+
+  reader.readAsText(fileImported, "utf-8");
+}
+
+class note {
+  note;
+  length;
+  constructor(note, length) {
+    this.note = note;
+    this.length = length;
+  }
+}
+
+function convertTxtToMusic(input) {
+  let notes = [];
+  const abc = input.split("\n");
+
+  console.log(abc);
+
+  abc.forEach((element) => {
+    notes.push(new note(element.split(" ")[0], element.split(" ")[1]));
+  });
+
+  console.log(notes);
+}
+
+const instrumentButtons = document.querySelectorAll(".instrument-btn");
+let currentInstrument = "piano";
+
 
 instrumentButtons.forEach((button) => {
-    button.addEventListener('click', () => {
-        instrumentButtons.forEach((b) => b.classList.remove('selected'));
-        button.classList.add('selected');
-        currentInstrument = button.getAttribute('data-instrument');
-        console.log('Instrument sélectionné :', currentInstrument);
-    });
+  button.addEventListener("click", () => {
+    instrumentButtons.forEach((b) => b.classList.remove("selected"));
+    button.classList.add("selected");
+    currentInstrument = button.getAttribute("data-instrument");
+    console.log("Instrument sélectionné :", currentInstrument);
+  });
 });
 
 const defaultButton = document.querySelector('[data-instrument="piano"]');
