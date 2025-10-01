@@ -1,0 +1,34 @@
+# IDE
+.idea/
+*.iml
+
+# OS trash
+.DS_Store
+Thumbs.db
+
+# Windows zone streams
+*:[Zz]one.Identifier
+
+# Audio bruts non versionnés
+assets/_raw/
+assets/_scratch/
+
+# Node (si un jour tu ajoutes un serveur)
+node_modules/
+# IDE
+.idea/
+*.iml
+
+# OS trash
+.DS_Store
+Thumbs.db
+
+# Windows zone streams
+*:[Zz]one.Identifier
+
+# Audio bruts non versionnés
+assets/_raw/
+assets/_scratch/
+
+# Node (si un jour tu ajoutes un serveur)
+node_modules/
