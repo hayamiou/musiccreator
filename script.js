@@ -1,4 +1,3 @@
-// Créer un synthétiseur piano
 const synth = new Tone.Synth().toDestination();
 
 function importFile() {
@@ -57,7 +56,6 @@ if (defaultButton) {
     defaultButton.classList.add('selected');
 }
 
-// Import dropdown toggle and basic interactions
 const importToggle = document.getElementById('importToggle');
 const importDropdown = document.getElementById('importDropdown');
 const chooseFileBtn = document.getElementById('chooseFileBtn');
@@ -92,7 +90,6 @@ if (chooseFileBtn && fileInput) {
     chooseFileBtn.addEventListener('click', () => fileInput.click());
 }
 
-// Basic dropzone highlight (no actual file handling yet)
 if (dropzone) {
     ['dragenter', 'dragover'].forEach((evt) => {
         dropzone.addEventListener(evt, (e) => {
@@ -111,18 +108,13 @@ if (dropzone) {
 }
 
 
-// Créer un synthétiseur piano
 const synth2 = new Tone.Synth().toDestination();
 
-// Récupérer le bouton
 const playBtn = document.getElementById('playBtn');
 
-// Ajouter l'événement au clic
 playBtn.addEventListener('click', async () => {
-    // Important : Tone.js nécessite une interaction utilisateur avant de jouer du son
     await Tone.start();
     
-    // Jouer la note G4 pendant 1 seconde
     synth.triggerAttackRelease("G4", "0.1s");
     
     console.log('Note G4 jouée !');
@@ -130,12 +122,9 @@ playBtn.addEventListener('click', async () => {
 
 const playBtn1 = document.getElementById('playBtn1');
 
-// Ajouter l'événement au clic
 playBtn1.addEventListener('click', async () => {
-    // Important : Tone.js nécessite une interaction utilisateur avant de jouer du son
     await Tone.start();
     
-    // Jouer la note G4 pendant 1 seconde
     synth.triggerAttackRelease("G5", "0.1s");
     
     console.log('Note G5 jouée !');
@@ -143,12 +132,9 @@ playBtn1.addEventListener('click', async () => {
 
 const playBtn2 = document.getElementById('playBtn2');
 
-// Ajouter l'événement au clic
 playBtn2.addEventListener('click', async () => {
-    // Important : Tone.js nécessite une interaction utilisateur avant de jouer du son
     await Tone.start();
     
-    // Jouer la note G4 pendant 1 seconde
     synth.triggerAttackRelease("G6", "0.1s");
     
     console.log('Note G6 jouée !');
@@ -157,12 +143,9 @@ playBtn2.addEventListener('click', async () => {
 
 const playBtn3 = document.getElementById('playBtn3');
 
-// Ajouter l'événement au clic
 playBtn3.addEventListener('click', async () => {
-    // Important : Tone.js nécessite une interaction utilisateur avant de jouer du son
     await Tone.start();
     
-    // Jouer la note G4 pendant 1 seconde
     synth.triggerAttackRelease("G7", "0.1s");
     
     console.log('Note G7 jouée !');
