@@ -109,3 +109,61 @@ if (dropzone) {
         });
     });
 }
+
+
+// Créer un synthétiseur piano
+const synth2 = new Tone.Synth().toDestination();
+
+// Récupérer le bouton
+const playBtn = document.getElementById('playBtn');
+
+// Ajouter l'événement au clic
+playBtn.addEventListener('click', async () => {
+    // Important : Tone.js nécessite une interaction utilisateur avant de jouer du son
+    await Tone.start();
+    
+    // Jouer la note G4 pendant 1 seconde
+    synth.triggerAttackRelease("G4", "0.1s");
+    
+    console.log('Note G4 jouée !');
+});
+
+const playBtn1 = document.getElementById('playBtn1');
+
+// Ajouter l'événement au clic
+playBtn1.addEventListener('click', async () => {
+    // Important : Tone.js nécessite une interaction utilisateur avant de jouer du son
+    await Tone.start();
+    
+    // Jouer la note G4 pendant 1 seconde
+    synth.triggerAttackRelease("G5", "0.1s");
+    
+    console.log('Note G5 jouée !');
+});
+
+const playBtn2 = document.getElementById('playBtn2');
+
+// Ajouter l'événement au clic
+playBtn2.addEventListener('click', async () => {
+    // Important : Tone.js nécessite une interaction utilisateur avant de jouer du son
+    await Tone.start();
+    
+    // Jouer la note G4 pendant 1 seconde
+    synth.triggerAttackRelease("G6", "0.1s");
+    
+    console.log('Note G6 jouée !');
+});
+
+
+const playBtn3 = document.getElementById('playBtn3');
+
+// Ajouter l'événement au clic
+playBtn3.addEventListener('click', async () => {
+    // Important : Tone.js nécessite une interaction utilisateur avant de jouer du son
+    await Tone.start();
+    
+    // Jouer la note G4 pendant 1 seconde
+    synth.triggerAttackRelease("G7", "0.1s");
+    
+    console.log('Note G7 jouée !');
+});

@@ -1,6 +1,12 @@
-Une tiket est considérée comme "FAIT" quand :
+Definition of Done (DOD) – Une tâche est considérée comme "FAIT" quand :
 ✅ Le code est écrit et fait ce qui est demandé
 ✅ Le code fonctionne sans erreur dans la console
-✅ Ça a été testé manuellement par le développeur
+✅ La fonctionnalité a été testée manuellement par le développeur
 ✅ Le code est poussé sur le repository Git
-✅ La fonctionnalité est validé par le Product Owner
+✅ La fonctionnalité est validée par le Product Owner
+
+Definition of Ready (DOR) – Une tâche est considérée comme "PRÊTE" quand :
+✅ La description est claire et compréhensible
+✅ Les critères d’acceptation sont définis
+✅ Les dépendances et prérequis sont identifiés
+✅ Le Product Owner a validé que la tâche peut être commencée
