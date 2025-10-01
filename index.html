@@ -3,7 +3,13 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>MusicaLau - POC</title>
+    <link rel="stylesheet" href="styles.css"> 
+</head>
+<body>
     <style>
       body {
         font-family: Arial, sans-serif;
@@ -57,20 +63,17 @@
       <h1>🎵 MusicaLau - POC</h1>
       <p>Cliquez sur le bouton pour jouer une note G4 pendant 1 seconde</p>
       <button id="playBtn">🎹 Jouer Note G4</button>
+      <div class="instrument-selector" aria-label="Sélection d'instrument">
+        <button id="pianoBtn" class="instrument-btn" data-instrument="piano" aria-label="Choisir Piano">Piano</button>
+        <button id="violinBtn" class="instrument-btn" data-instrument="violin" aria-label="Choisir Violon">Violon</button>
+        <button id="guitarBtn" class="instrument-btn" data-instrument="guitar" aria-label="Choisir Guitare">Guitare</button>
+      </div>
     </div>
 
-    <div
-      class="dropzone"
-      id="dropzone"
-      role="button"
-      tabindex="0"
-      aria-label="Déposez vos fichiers ici"
-    >
-      <p>Déposez vos fichiers</p>
-    </div>
+
 
     <input type="file" name="" id="musicFile" />
-    <button id="importFile" onclick="importFile()">Play</button>
+    <button id="importFile" onclick="importFile()">Import</button>
 
     <!-- CDN Tone.js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
