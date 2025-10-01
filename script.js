@@ -1,4 +1,3 @@
-// Créer un synthétiseur piano
 const synth = new Tone.Synth().toDestination();
 
 function importFile() {
@@ -57,7 +56,6 @@ if (defaultButton) {
     defaultButton.classList.add('selected');
 }
 
-// Import dropdown toggle and basic interactions
 const importToggle = document.getElementById('importToggle');
 const importDropdown = document.getElementById('importDropdown');
 const chooseFileBtn = document.getElementById('chooseFileBtn');
@@ -92,7 +90,6 @@ if (chooseFileBtn && fileInput) {
     chooseFileBtn.addEventListener('click', () => fileInput.click());
 }
 
-// Basic dropzone highlight (no actual file handling yet)
 if (dropzone) {
     ['dragenter', 'dragover'].forEach((evt) => {
         dropzone.addEventListener(evt, (e) => {
@@ -109,3 +106,47 @@ if (dropzone) {
         });
     });
 }
+
+
+const synth2 = new Tone.Synth().toDestination();
+
+const playBtn = document.getElementById('playBtn');
+
+playBtn.addEventListener('click', async () => {
+    await Tone.start();
+    
+    synth.triggerAttackRelease("G4", "0.1s");
+    
+    console.log('Note G4 jouée !');
+});
+
+const playBtn1 = document.getElementById('playBtn1');
+
+playBtn1.addEventListener('click', async () => {
+    await Tone.start();
+    
+    synth.triggerAttackRelease("G5", "0.1s");
+    
+    console.log('Note G5 jouée !');
+});
+
+const playBtn2 = document.getElementById('playBtn2');
+
+playBtn2.addEventListener('click', async () => {
+    await Tone.start();
+    
+    synth.triggerAttackRelease("G6", "0.1s");
+    
+    console.log('Note G6 jouée !');
+});
+
+
+const playBtn3 = document.getElementById('playBtn3');
+
+playBtn3.addEventListener('click', async () => {
+    await Tone.start();
+    
+    synth.triggerAttackRelease("G7", "0.1s");
+    
+    console.log('Note G7 jouée !');
+});

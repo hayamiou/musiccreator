@@ -4,3 +4,9 @@ Un ticket est considéré comme "FAIT" quand :
 ✅ La fonctionnalité a été testée manuellement par le développeur
 ✅ Le code est poussé sur le repository Git
 ✅ La fonctionnalité est validée par le Product Owner
+
+Definition of Ready (DOR) – Une tâche est considérée comme "PRÊTE" quand :
+✅ La description est claire et compréhensible
+✅ Les critères d’acceptation sont définis
+✅ Les dépendances et prérequis sont identifiés
+✅ Le Product Owner a validé que la tâche peut être commencée
