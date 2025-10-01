@@ -14,3 +14,20 @@ playBtn.addEventListener('click', async () => {
     
     console.log('Note G4 jouée !');
 });
+
+const instrumentButtons = document.querySelectorAll('.instrument-btn');
+let currentInstrument = 'piano';
+
+instrumentButtons.forEach((button) => {
+    button.addEventListener('click', () => {
+        instrumentButtons.forEach((b) => b.classList.remove('selected'));
+        button.classList.add('selected');
+        currentInstrument = button.getAttribute('data-instrument');
+        console.log('Instrument sélectionné :', currentInstrument);
+    });
+});
+
+const defaultButton = document.querySelector('[data-instrument="piano"]');
+if (defaultButton) {
+    defaultButton.classList.add('selected');
+}
