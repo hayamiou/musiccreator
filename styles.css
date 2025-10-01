@@ -91,6 +91,42 @@ body {
             border-radius: 12px;
             cursor: pointer;
         }
+
+        .import-feedback {
+            margin-top: 12px;
+            text-align: left;
+            font-size: 13px;
+            color: #1d1d1f;
+            max-height: 220px;
+            overflow: auto;
+            padding-right: 4px;
+        }
+
+        .import-feedback .error {
+            color: #b00020;
+            background: #fdecec;
+            border: 1px solid #f5c2c7;
+            padding: 8px 10px;
+            border-radius: 8px;
+        }
+
+        .import-feedback .notes {
+            background: #f7f7fa;
+            border: 1px solid rgba(0,0,0,0.08);
+            border-radius: 8px;
+            padding: 8px 10px;
+        }
+
+        .import-feedback ul {
+            list-style: none;
+            padding: 0;
+            margin: 6px 0 0 0;
+        }
+
+        .import-feedback li {
+            padding: 2px 0;
+            color: #333;
+        }
         
         .container {
             width: 100%;
