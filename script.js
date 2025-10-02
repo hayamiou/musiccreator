@@ -1,4 +1,3 @@
-const synth = new Tone.Synth().toDestination();
 
 class note {
   note;
@@ -144,4 +143,6 @@ function renderParsed(events, errors) {
     }
     importFeedback.innerHTML = html;
 }
+
+
 
