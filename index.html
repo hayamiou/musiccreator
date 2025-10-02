@@ -1,96 +1,101 @@
 <!DOCTYPE html>
 <html lang="fr">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>MusicaLau - POC</title>
-    <link rel="stylesheet" href="styles.css"> 
+    <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="piano.css">
-</head>
+  </head>
+
 <body>
-    <header class="topbar">
-      <div class="topbar-inner">
-        <div class="brand">MusicaLau</div>
-        <nav class="top-actions">
-          <div class="import-menu">
-            <button id="importToggle" class="import-btn" aria-expanded="false" aria-controls="importDropdown">Importer</button>
-            <div id="importDropdown" class="import-dropdown" role="menu" aria-hidden="true">
-              <div class="import-panel" aria-label="Zone d'import de fichier">
-                <p class="import-hint">Glissez-déposez vos fichiers ou cliquez pour sélectionner</p>
-                <div class="dropzone" id="dropzone" role="button" tabindex="0" aria-label="Déposez vos fichiers ici">
-                  <input type="file" id="fileInput" class="sr-only" multiple aria-hidden="true" />
-                  <span class="drop-icon" aria-hidden="true">⬆</span>
-                  <span class="drop-text">Déposez les fichiers ici</span>
-                </div>
-                <button id="chooseFileBtn" class="choose-btn" aria-label="Choisir un fichier">Choisir un fichier</button>
-                <div id="importFeedback" class="import-feedback" aria-live="polite"></div>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">MusicaLau</div>
+      <nav class="top-actions">
+        <div class="import-menu">
+          <button id="importToggle" class="import-btn" aria-expanded="false"
+            aria-controls="importDropdown">Importer</button>
+          <div id="importDropdown" class="import-dropdown" role="menu" aria-hidden="true">
+            <div class="import-panel" aria-label="Zone d'import de fichier">
+              <p class="import-hint">Glissez-déposez vos fichiers ou cliquez pour sélectionner</p>
+              <div class="dropzone" id="dropzone" role="button" tabindex="0" aria-label="Déposez vos fichiers ici">
+                <input type="file" id="fileInput" class="sr-only" multiple aria-hidden="true" />
+                <span class="drop-icon" aria-hidden="true">⬆</span>
+                <span class="drop-text">Déposez les fichiers ici</span>
               </div>
+              <button id="chooseFileBtn" class="choose-btn" aria-label="Choisir un fichier">Choisir un fichier</button>
+              <div id="importFeedback" class="import-feedback" aria-live="polite"></div>
             </div>
           </div>
-        </nav>
-      </div>
-    </header>
-
-    <div class="container">
-      <div class="instrument-selector" aria-label="Sélection d'instrument">
-        <button id="pianoBtn" class="instrument-btn" data-instrument="piano" aria-label="Choisir Piano">Piano</button>
-        <button id="violinBtn" class="instrument-btn" data-instrument="violin" aria-label="Choisir Violon">Violon</button>
-        <button id="guitarBtn" class="instrument-btn" data-instrument="guitar" aria-label="Choisir Guitare">Guitare</button>
-      </div>
+        </div>
+      </nav>
     </div>
+  </header>
 
-    <button id="playBtnA4">🎹 Jouer Note A4</button>
-    <button id="playBtnB4">🎹 Jouer Note B4</button>
-    <button id="playBtnC4">🎹 Jouer Note C4</button>
-    <button id="playBtnD4">🎹 Jouer Note D4</button>
+  <div class="container">
+    <div class="instrument-selector" aria-label="Sélection d'instrument">
+      <button id="pianoBtn" class="instrument-btn" data-instrument="piano" aria-label="Choisir Piano">Piano</button>
+      <button id="violinBtn" class="instrument-btn" data-instrument="violin" aria-label="Choisir Violon">Violon</button>
+      <button id="guitarBtn" class="instrument-btn" data-instrument="guitar"
+        aria-label="Choisir Guitare">Guitare</button>
+    </div>
+  </div>
 
-    <div id="piano">
-        <h1>Piano</h1>
+  <button id="playBtnA4">🎹 Jouer Note A4</button>
+  <button id="playBtnB4">🎹 Jouer Note B4</button>
+  <button id="playBtnC4">🎹 Jouer Note C4</button>
+  <button id="playBtnD4">🎹 Jouer Note D4</button>
+
+  <div id="piano">
+    <h1>Piano</h1>
 
     <div class="keys black">
-      <strong>C#6</strong>
-      <strong>D#6</strong>
-      <strong>F#6</strong>
-      <strong>G#6</strong>
-      <strong>A#6</strong>
-      <strong>C#7</strong>
-      <strong>D#7</strong>
-      <strong>F#7</strong>
-      <strong>G#7</strong>
-      <strong>A#7</strong>
+      <p id="C#6">C#6</p>
+      <p id="D#6">D#6</p>
+      <p id="F#6">F#6</p>
+      <p id="G#6">G#6</p>
+      <p id="A#6">A#6</p>
+      <p id="C#7">C#7</p>
+      <p id="D#7">D#7</p>
+      <p id="F#7">F#7</p>
+      <p id="G#7">G#7</p>
+      <p id="A#7">A#7</p>
     </div>
 
     <div class="keys white">
-      <strong>C6</strong>
-      <strong>D6</strong>
-      <strong>E6</strong>
-      <strong>F6</strong>
-      <strong>G6</strong>
-      <strong>A6</strong>
-      <strong>B6</strong>
-      <strong>C7</strong>
-      <strong>D7</strong>
-      <strong>E7</strong>
-      <strong>F7</strong>
-      <strong>G7</strong>
-      <strong>A7</strong>
-      <strong>B7</strong>
-      <strong>C8</strong>
+      <p id="C6">C6</p>
+      <p id="D6">D6</p>
+      <p id="E6">E6</p>
+      <p id="F6">F6</p>
+      <p id="G6">G6</p>
+      <p id="A6">A6</p>
+      <p id="B6">B6</p>
+      <p id="C7">C7</p>
+      <p id="D7">D7</p>
+      <p id="E7">E7</p>
+      <p id="F7">F7</p>
+      <p id="G7">G7</p>
+      <p id="A7">A7</p>
+      <p id="B7">B7</p>
+      <p id="C8">C8</p>
     </div>
-    </div>
+  </div>
 
-    <!-- CDN Tone.js -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
+  <!-- CDN Tone.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
 
-    <!-- Parser -->
-    <script src="parsing.js"></script>
-    <!-- Script principal -->
-     <script src="script.js"> </script>
-    <script src="instrumentSelector.js"></script>
-    <script src="piano.js"></script>
+  <!-- Parser -->
+  <script src="parsing.js"></script>
+  <!-- Script principal -->
+  <script src="script.js"> </script>
+  <script src="instrumentSelector.js"></script>
+  <script src="piano.js"></script>
 </body>
 
 </html>

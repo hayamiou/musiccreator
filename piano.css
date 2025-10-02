@@ -2,15 +2,20 @@
   margin-top: 20px;
 }
 
-.white strong {
+.white {
   background-color: white;
   border: 2px solid black;
   color: black;
   padding: 5px;
 }
 
-.black strong {
+.black {
   background-color: black;
   color: white;
   padding: 5px;
+}
+
+.highlight {
+  background-color: blueviolet;
+  border-width: 20px;
 }

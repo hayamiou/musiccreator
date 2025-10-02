@@ -83,6 +83,10 @@ document.addEventListener("keydown", (e) => {
   const note = keys[key];
   if (note && !activeOscillators[note]) {
     playNote(note);
+    console.log(note);
+    const el = document.getElementById(note);
+    console.log(el)
+    el.classList.add("highlight");
   }
 });
 
@@ -91,5 +95,8 @@ document.addEventListener("keyup", (e) => {
   const note = keys[key];
   if (note) {
     stopNote(note);
+    const el = document.getElementById(note);
+    if (el) el.classList.remove("highlight");
   }
 });
+
