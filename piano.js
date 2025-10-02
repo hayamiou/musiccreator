@@ -52,6 +52,10 @@ function noteToFrequency(note) {
 }
 
 function playNote(note) {
+  const selectPiano = document.getElementById("piano");
+  if (window.getComputedStyle(selectPiano).display === "none") {
+    return;
+  }
   const freq = noteToFrequency(note);
   const osc = audioCtx.createOscillator();
   const gain = audioCtx.createGain();
