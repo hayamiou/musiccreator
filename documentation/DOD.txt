@@ -1,4 +1,4 @@
-Definition of Done (DOD) – Une tâche est considérée comme "FAIT" quand :
+Definition of Done (DOD)
 ✅ Le code est écrit et fait ce qui est demandé
 ✅ Le code fonctionne sans erreur dans la console
 ✅ La fonctionnalité a été testée manuellement par le développeur
