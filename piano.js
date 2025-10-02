@@ -52,6 +52,10 @@ function noteToFrequency(note) {
 }
 
 function playNote(note) {
+  const selectPiano = document.getElementById("piano");
+  if (window.getComputedStyle(selectPiano).display === "none") {
+    return;
+  }
   const freq = noteToFrequency(note);
   const osc = audioCtx.createOscillator();
   const gain = audioCtx.createGain();
@@ -79,6 +83,10 @@ document.addEventListener("keydown", (e) => {
   const note = keys[key];
   if (note && !activeOscillators[note]) {
     playNote(note);
+    console.log(note);
+    const el = document.getElementById(note);
+    console.log(el)
+    el.classList.add("highlight");
   }
 });
 
@@ -87,5 +95,8 @@ document.addEventListener("keyup", (e) => {
   const note = keys[key];
   if (note) {
     stopNote(note);
+    const el = document.getElementById(note);
+    if (el) el.classList.remove("highlight");
   }
 });
+

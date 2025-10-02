@@ -1,15 +1,20 @@
 <!DOCTYPE html>
 <html lang="fr">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>MusicaLau - POC</title>
-    <link rel="stylesheet" href="styles.css"> 
-</head>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="piano.css">
+  </head>
+
 <body>
+
     <header class="topbar">
       <div class="topbar-inner">
         <div class="brand">MusicaLau</div>
@@ -38,36 +43,78 @@
                   <span id="durationDividerValue" style="color:#6e6e73;">1.0×</span>
                 </div>
               </div>
+              <button id="chooseFileBtn" class="choose-btn" aria-label="Choisir un fichier">Choisir un fichier</button>
+              <div id="importFeedback" class="import-feedback" aria-live="polite"></div>
             </div>
           </div>
-        </nav>
-      </div>
-    </header>
+        </div>
+      </nav>
+    </div>
+  </header>
 
-    <div class="container">
-      <div class="instrument-selector" aria-label="Sélection d'instrument">
-        <button id="pianoBtn" class="instrument-btn" data-instrument="piano" aria-label="Choisir Piano">Piano</button>
-        <button id="violinBtn" class="instrument-btn" data-instrument="violin" aria-label="Choisir Violon">Violon</button>
-        <button id="guitarBtn" class="instrument-btn" data-instrument="guitar" aria-label="Choisir Guitare">Guitare</button>
-      </div>
+  <div class="container">
+    <div class="instrument-selector" aria-label="Sélection d'instrument">
+      <button id="pianoBtn" class="instrument-btn" data-instrument="piano" aria-label="Choisir Piano">Piano</button>
+      <button id="violinBtn" class="instrument-btn" data-instrument="violin" aria-label="Choisir Violon">Violon</button>
+      <button id="guitarBtn" class="instrument-btn" data-instrument="guitar"
+        aria-label="Choisir Guitare">Guitare</button>
+    </div>
+  </div>
+
+  <button id="playBtnA4">🎹 Jouer Note A4</button>
+  <button id="playBtnB4">🎹 Jouer Note B4</button>
+  <button id="playBtnC4">🎹 Jouer Note C4</button>
+  <button id="playBtnD4">🎹 Jouer Note D4</button>
+
+  <div id="piano">
+    <h1>Piano</h1>
+
+    <p>Touches noires : <strong>A Z E R T Y U I O P</strong></p>
+    <p>Touches blanches : <strong>Q S D F G H J K L M N , ; : !</strong></p>
+
+    <div class="keys black">
+      <div class="touche_noire" id="C#6">C#6</div>
+      <div class="touche_noire" id="D#6">D#6</div>
+      <div class="touche_noire" id="F#6">F#6</div>
+      <div class="touche_noire" id="G#6">G#6</div>
+      <div class="touche_noire" id="A#6">A#6</div>
+      <div class="touche_noire" id="C#7">C#7</div>
+      <div class="touche_noire" id="D#7">D#7</div>
+      <div class="touche_noire" id="F#7">F#7</div>
+      <div class="touche_noire" id="G#7">G#7</div>
+      <div class="touche_noire" id="A#7">A#7</div>
     </div>
 
-    <button id="playBtnA4">🎹 Jouer Note A4</button>
-    <button id="playBtnB4">🎹 Jouer Note B4</button>
-    <button id="playBtnC4">🎹 Jouer Note C4</button>
-    <button id="playBtnD4">🎹 Jouer Note D4</button>
+    <div class="keys white">
+      <div class="touche_blanche" id="C6">C6</div>
+      <div class="touche_blanche" id="D6">D6</div>
+      <div class="touche_blanche" id="E6">E6</div>
+      <div class="touche_blanche" id="F6">F6</div>
+      <div class="touche_blanche" id="G6">G6</div>
+      <div class="touche_blanche" id="A6">A6</div>
+      <div class="touche_blanche" id="B6">B6</div>
+      <div class="touche_blanche" id="C7">C7</div>
+      <div class="touche_blanche" id="D7">D7</div>
+      <div class="touche_blanche" id="E7">E7</div>
+      <div class="touche_blanche" id="F7">F7</div>
+      <div class="touche_blanche" id="G7">G7</div>
+      <div class="touche_blanche" id="A7">A7</div>
+      <div class="touche_blanche" id="B7">B7</div>
+      <div class="touche_blanche" id="C8">C8</div>
+    </div>
+  </div>
 
-    <a href="piano.html">Jouer du piano</a>
+  <!-- CDN Tone.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
 
-    <!-- CDN Tone.js -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
 
-    <!-- Instrument Selector -->
-    <script src="instrumentSelector.js"></script>
-    <!-- Parser -->
-    <script src="parsing.js"></script>
-    <!-- Script principal -->
-    <script src="script.js"></script>
+  <!-- Parser -->
+  <script src="parsing.js"></script>
+  <!-- Script principal -->
+  <script src="script.js"> </script>
+  <script src="instrumentSelector.js"></script>
+  <script src="piano.js"></script>
+
 </body>
 
 </html>
