@@ -1,4 +1,3 @@
-const synth = new Tone.Synth().toDestination();
 
 class note {
   note;
@@ -102,7 +101,7 @@ function handleImport(file) {
         const content = event.target.result;
         try {
             const result = window.parseScoreWithReport ? window.parseScoreWithReport(content) : { events: [], errors: ['Parser indisponible'] };
-            renderParsed(result.events, result.errors);
+            renderParsed(result.events, result.errors, file && file.name ? file.name : undefined);
         } catch (err) {
             showError('Erreur lors du parsing.');
             console.error(err);
@@ -120,22 +119,88 @@ function showError(message) {
     importFeedback.innerHTML = `<div class="error">${message}</div>`;
 }
 
-function renderParsed(events, errors) {
+let parsedEvents = [];
+let part = null;
+let durationDivider = 1.0;
+
+const durationDividerInput = document.getElementById('durationDivider');
+const durationDividerValue = document.getElementById('durationDividerValue');
+if (durationDividerInput) {
+    const updateDivider = () => {
+        const raw = parseFloat(durationDividerInput.value);
+        durationDivider = Number.isFinite(raw) && raw > 0 ? raw : 1.0;
+        if (durationDividerValue) durationDividerValue.textContent = `${durationDivider.toFixed(1)}×`;
+    };
+    durationDividerInput.addEventListener('input', updateDivider);
+    updateDivider();
+}
+
+function buildEventsFromParsed(parsedArray) {
+    let currentTime = 0;
+    return parsedArray.map((ev) => {
+        const adjustedDuration = ev.duration / (durationDivider || 1.0);
+        const event = { time: currentTime, note: ev.note, duration: adjustedDuration };
+        currentTime += adjustedDuration;
+        return event;
+    });
+}
+
+function playParsedOnce(parsedArray) {
+    if (!Array.isArray(parsedArray) || parsedArray.length === 0) return;
+    if (part) {
+        part.dispose();
+        part = null;
+    }
+    const events = buildEventsFromParsed(parsedArray);
+    part = new Tone.Part((time, value) => {
+        if (value.note !== "0") {
+            const sampler = window.currentSampler;
+            if (sampler && sampler.loaded) {
+                sampler.triggerAttackRelease(value.note, value.duration, time);
+            } else {
+                const synthTmp = new Tone.Synth().toDestination();
+                synthTmp.triggerAttackRelease(value.note, value.duration, time);
+            }
+        }
+    }, events).start(0);
+    Tone.Transport.stop();
+    Tone.Transport.seconds = 0;
+    Tone.Transport.start();
+}
+
+const playParsedBtn = document.getElementById('playParsedBtn');
+const pauseParsedBtn = document.getElementById('pauseParsedBtn');
+
+if (playParsedBtn) {
+    playParsedBtn.addEventListener('click', async () => {
+        await Tone.start();
+        playParsedOnce(parsedEvents);
+    });
+}
+
+if (pauseParsedBtn) {
+    pauseParsedBtn.addEventListener('click', async () => {
+        await Tone.start();
+        Tone.Transport.pause();
+    });
+}
+
+// Capture des événements parsés depuis renderParsed
+const _origRenderParsed = renderParsed;
+renderParsed = function(events, errors, filename) {
+    parsedEvents = Array.isArray(events) ? events : [];
+    _origRenderParsed(events, errors, filename);
+};
+
+function renderParsed(events, errors, filename) {
     if (!importFeedback) return;
     const count = Array.isArray(events) ? events.length : 0;
+    console.log('Parsed notes:', events);
     let html = '';
-    if (count > 0) {
-        html += '<div class="notes">';
-        html += `<strong>${count} notes parsées</strong>`;
-        html += '<ul>';
-        events.slice(0, 100).forEach((ev) => {
-            html += `<li>${ev.note} — ${ev.durationSec}s</li>`;
-        });
-        if (events.length > 100) {
-            html += `<li>… (+${events.length - 100} autres)</li>`;
-        }
-        html += '</ul></div>';
-    } else {
+    if (filename) {
+        html += `<div style="margin-bottom:6px;color:#1d1d1f;"><strong>Fichier :</strong> ${filename}</div>`;
+    }
+    if (!count) {
         html += '<div class="error">Aucune note valide trouvée.</div>';
     }
     if (Array.isArray(errors) && errors.length > 0) {
@@ -145,5 +210,4 @@ function renderParsed(events, errors) {
 }
 
 
-const synth2 = new Tone.Synth().toDestination();
 
