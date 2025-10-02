@@ -1,0 +1,19 @@
+body {
+  background-color: gray;
+}
+
+.white {
+  margin-top: 20px;
+}
+
+.white strong {
+  background-color: white;
+  color: black;
+  padding: 5px;
+}
+
+.black strong {
+  background-color: black;
+  color: white;
+  padding: 5px;
+}

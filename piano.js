@@ -76,14 +76,16 @@ function stopNote(note) {
 
 document.addEventListener("keydown", (e) => {
   const key = e.key.toLowerCase();
-  if (keys[key] && !activeOscillators[keys[e.key]]) {
-    playNote(keys[key]);
+  const note = keys[key];
+  if (note && !activeOscillators[note]) {
+    playNote(note);
   }
 });
 
 document.addEventListener("keyup", (e) => {
   const key = e.key.toLowerCase();
-  if (keys[key]) {
-    stopNote(keys[key]);
+  const note = keys[key];
+  if (note) {
+    stopNote(note);
   }
 });
