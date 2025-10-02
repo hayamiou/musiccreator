@@ -1,15 +1,18 @@
-// Basic score parser: parses lines of "NOTE DURATION_SECONDS"
-// - Accepts notes A–G followed by a single-digit octave (e.g., C4, D5, G3)
 
 
- (function attachParserToWindow() {
-   const NOTE_REGEX = /^[A-G]\d$/; // e.g., C4, D5, G3 (no # or b)
+(function attachParserToWindow() {
+  const NOTE_REGEX = /^[A-G]\d$/; 
 
   function isValidNoteToken(token) {
     if (!token) return false;
     const upper = String(token).trim().toUpperCase();
-    if (upper === "UNKNOWN" || upper === "0") return false;
-    return NOTE_REGEX.test(upper);
+    // Accept valid notes and silence (0)
+    return NOTE_REGEX.test(upper) || upper === "0";
+  }
+
+  function isSilence(token) {
+    if (!token) return false;
+    return String(token).trim() === "0";
   }
 
   function tryParseDurationSeconds(token) {
@@ -20,7 +23,6 @@
     return value;
   }
 
-  // Parses a single line. Returns { note, durationSec } or null if invalid
   function parseLine(line) {
     if (line == null) return null;
     const raw = String(line).trim();
@@ -38,10 +40,10 @@
     return {
       note: noteToken.trim().toUpperCase(),
       durationSec,
+      isSilence: isSilence(noteToken)
     };
   }
 
-  // Parses entire text and returns only valid events
   function parseScore(text) {
     if (text == null) return [];
     const lines = String(text).split(/\r?\n/);
@@ -73,10 +75,9 @@
     return { events, errors };
   }
 
-  // Expose API
   window.parseScore = parseScore;
   window.parseScoreWithReport = parseScoreWithReport;
-  window.__scoreParser = { isValidNoteToken, parseLine };
+  window.__scoreParser = { isValidNoteToken, parseLine, isSilence };
 })();
 
 
