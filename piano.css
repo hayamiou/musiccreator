@@ -1,21 +1,29 @@
+.keys {
+  display: flex;
+}
+
+#piano {
+  flex-direction: column;
+}
+
 .white {
   margin-top: 20px;
 }
 
-.white {
+.keys .touche_blanche {
   background-color: white;
   border: 2px solid black;
   color: black;
   padding: 5px;
 }
 
-.black {
+.keys .touche_noire {
   background-color: black;
   color: white;
   padding: 5px;
 }
 
 .highlight {
-  background-color: blueviolet;
+  background-color: blueviolet !important;
   border-width: 20px;
 }

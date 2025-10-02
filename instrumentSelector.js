@@ -36,7 +36,7 @@ function changerInstrument(instrument) {
   console.log("Instrument changé pour :", instrument);
   const selectPiano = document.getElementById("piano");
   if (instrument === "piano") {
-    selectPiano.style.display = "block";
+    selectPiano.style.display = "flex";
   } else {
     selectPiano.style.display = "none";
   }
