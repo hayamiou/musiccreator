@@ -119,23 +119,85 @@ function showError(message) {
     importFeedback.innerHTML = `<div class="error">${message}</div>`;
 }
 
+let parsedEvents = [];
+let part = null;
+let durationDivider = 1.0;
+
+const durationDividerInput = document.getElementById('durationDivider');
+const durationDividerValue = document.getElementById('durationDividerValue');
+if (durationDividerInput) {
+    const updateDivider = () => {
+        const raw = parseFloat(durationDividerInput.value);
+        durationDivider = Number.isFinite(raw) && raw > 0 ? raw : 1.0;
+        if (durationDividerValue) durationDividerValue.textContent = `${durationDivider.toFixed(1)}×`;
+    };
+    durationDividerInput.addEventListener('input', updateDivider);
+    updateDivider();
+}
+
+function buildEventsFromParsed(parsedArray) {
+    let currentTime = 0;
+    return parsedArray.map((ev) => {
+        const adjustedDuration = ev.duration / (durationDivider || 1.0);
+        const event = { time: currentTime, note: ev.note, duration: adjustedDuration };
+        currentTime += adjustedDuration;
+        return event;
+    });
+}
+
+function playParsedOnce(parsedArray) {
+    if (!Array.isArray(parsedArray) || parsedArray.length === 0) return;
+    if (part) {
+        part.dispose();
+        part = null;
+    }
+    const events = buildEventsFromParsed(parsedArray);
+    part = new Tone.Part((time, value) => {
+        if (value.note !== "0") {
+            const sampler = window.currentSampler;
+            if (sampler && sampler.loaded) {
+                sampler.triggerAttackRelease(value.note, value.duration, time);
+            } else {
+                const synthTmp = new Tone.Synth().toDestination();
+                synthTmp.triggerAttackRelease(value.note, value.duration, time);
+            }
+        }
+    }, events).start(0);
+    Tone.Transport.stop();
+    Tone.Transport.seconds = 0;
+    Tone.Transport.start();
+}
+
+const playParsedBtn = document.getElementById('playParsedBtn');
+const pauseParsedBtn = document.getElementById('pauseParsedBtn');
+
+if (playParsedBtn) {
+    playParsedBtn.addEventListener('click', async () => {
+        await Tone.start();
+        playParsedOnce(parsedEvents);
+    });
+}
+
+if (pauseParsedBtn) {
+    pauseParsedBtn.addEventListener('click', async () => {
+        await Tone.start();
+        Tone.Transport.pause();
+    });
+}
+
+// Capture des événements parsés depuis renderParsed
+const _origRenderParsed = renderParsed;
+renderParsed = function(events, errors) {
+    parsedEvents = Array.isArray(events) ? events : [];
+    _origRenderParsed(events, errors);
+};
+
 function renderParsed(events, errors) {
     if (!importFeedback) return;
     const count = Array.isArray(events) ? events.length : 0;
+    console.log('Parsed notes:', events);
     let html = '';
-    if (count > 0) {
-        const linesText = events.slice(0, 100)
-            .map((ev) => `  { note: "${ev.note}", duration: ${ev.duration} },`)
-            .join('\n');
-        const arrayText = `const parsedNotes = [\n${linesText}\n];`;
-        html += '<div class="notes">';
-        html += `<strong>${count} notes parsées</strong>`;
-        html += `<pre>${arrayText}</pre>`;
-        if (events.length > 100) {
-            html += `<div style="margin-top:4px;color:#6e6e73;">… (+${events.length - 100} autres)</div>`;
-        }
-        html += '</div>';
-    } else {
+    if (!count) {
         html += '<div class="error">Aucune note valide trouvée.</div>';
     }
     if (Array.isArray(errors) && errors.length > 0) {

@@ -15,12 +15,15 @@ const notes = ["A4", "B4", "C4", "D4"];
 let sampler;
 
 // Fonction pour créer un sampler pour l’instrument choisi
-function createSampler(instrument) {
-    sampler = new Tone.Sampler(
-        {
-            "A4": sons[instrument]
-        }
-    ).toDestination();
+async function createSampler(instrument) {
+    if (sampler) {
+        sampler.dispose();
+        sampler = null;
+    }
+    const mapping = SAMPLE_SOURCES[instrument] || SAMPLE_SOURCES.piano;
+    sampler = new Tone.Sampler(mapping).toDestination();
+    await Tone.loaded();
+    window.currentSampler = sampler;
 }
 
 // Boutons des notes
@@ -50,3 +53,5 @@ document.getElementById("guitarBtn").addEventListener("click", () => changerInst
 
 // Init avec instrument par défaut
 changerInstrument("violon");
+
+(function initExpose(){ window.currentSampler = sampler; })();
