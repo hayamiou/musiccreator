@@ -1,17 +1,21 @@
 <!DOCTYPE html>
 <html lang="fr">
-  <head>
+
+<head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>MusicaLau - POC</title>
-    <link rel="stylesheet" href="styles.css"> 
-</head>
+
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>MusicaLau - POC</title>
+        <link rel="stylesheet" href="styles.css">
+    </head>
+
 <body>
     <header class="topbar">
       <div class="topbar-inner">
+        <div class="brand">MusicaLau</div>
         <nav class="top-actions">
           <div class="import-menu">
             <button id="importToggle" class="import-btn" aria-expanded="false" aria-controls="importDropdown">Importer</button>
@@ -24,6 +28,7 @@
                   <span class="drop-text">Déposez les fichiers ici</span>
                 </div>
                 <button id="chooseFileBtn" class="choose-btn" aria-label="Choisir un fichier">Choisir un fichier</button>
+                <div id="importFeedback" class="import-feedback" aria-live="polite"></div>
               </div>
             </div>
           </div>
@@ -32,7 +37,6 @@
     </header>
 
     <div class="container">
-      <h1>MusicaLau</h1>
       <div class="instrument-selector" aria-label="Sélection d'instrument">
         <button id="pianoBtn" class="instrument-btn" data-instrument="piano" aria-label="Choisir Piano">Piano</button>
         <button id="violinBtn" class="instrument-btn" data-instrument="violin" aria-label="Choisir Violon">Violon</button>
@@ -40,21 +44,18 @@
       </div>
     </div>
 
-            <button id="playBtn">🎹 Jouer Note G4</button>
-             <button id="playBtn1">🎹 Jouer Note G5</button>
-              <button id="playBtn2">🎹 Jouer Note G6</button>
-               <button id="playBtn3">🎹 Jouer Note G7</button>
-
-
-
-
-    <input type="file" name="" id="musicFile" />
-    <button id="importFile" onclick="importFile()">Import</button>
+    <button id="playBtnA4">🎹 Jouer Note A4</button>
+    <button id="playBtnB4">🎹 Jouer Note B4</button>
+    <button id="playBtnC4">🎹 Jouer Note C4</button>
+    <button id="playBtnD4">🎹 Jouer Note D4</button>
 
     <!-- CDN Tone.js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
 
+    <!-- Parser -->
+    <script src="parsing.js"></script>
     <!-- Script principal -->
-    <script src="script.js"></script>
-  </body>
+    <script src="instrumentSelector.js"></script>
+</body>
+
 </html>
