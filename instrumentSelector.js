@@ -1,44 +1,49 @@
-//sons
+
 const sons = {
-  "piano": "https://tonejs.github.io/audio/berklee/gong_1.mp3",
-  "guitare": "https://tonejs.github.io/audio/berklee/Bang_Tin_1.mp3",
-  "violon": "https://tonejs.github.io/audio/berklee/violin_bounce1.mp3"
+    "violon": "https://raw.githubusercontent.com/hayamiou/musiccreator/main/assets/violin/violin_A4.mp3",
+    "piano": "https://raw.githubusercontent.com/hayamiou/musiccreator/main/assets/piano/piano_A4.mp3",
+    "guitare": "https://raw.githubusercontent.com/hayamiou/musiccreator/main/assets/guitar/guitar_A4.mp3"
 };
 
-// Fonction pour changer l'instrument sélectionné :
-// Met à jour le texte de sélection et charge le son correspondant dans le player
-function changerInstrument(instrument) {
-    selection.textContent = "Sélectionné : " + instrument;
-    player.load(sons[instrument])
+
+const notes = ["A4", "B4", "C4", "D4"];
+
+// Sampler global (sera recréé quand on change d’instrument)
+let sampler;
+
+// Fonction pour créer un sampler pour l’instrument choisi
+function createSampler(instrument) {
+    sampler = new Tone.Sampler(
+        {
+            "A4": sons[instrument]
+        }
+    ).toDestination();
 }
 
-//initialiser le player
-const player = new Tone.Player(
-    sons["piano"]
-).toDestination();
-
-// Récupérer le bouton Play 
-// TODO : à suppr et remplacer par un vrai piano
-const playBtn = document.getElementById('playBtn');
-
-// Ajouter l'événement au clic du bouton Play
-playBtn.addEventListener('click', async () => {
-
-    Tone.loaded().then(() => {
-        player.start();
+// Boutons des notes
+notes.forEach((note) => {
+    const btn = document.getElementById(`playBtn${note}`);
+    btn.addEventListener("click", async () => {
+        await Tone.start();
+        sampler.triggerAttackRelease(note, "1n");
+        console.log(`Note ${note} jouée !`);
     });
-
-    console.log('Note G4 jouée !');
 });
 
-// Récupération du texte de sélection d'instrument
-// Exemple : "Sélectionné : guitare"
+// Changement d’instrument
+function changerInstrument(instrument) {
+    selection.textContent = "Sélectionné : " + instrument;
+    createSampler(instrument);
+    console.log("Instrument changé pour :", instrument);
+}
+
+// Récupération du texte de sélection
 const selection = document.getElementById("selection");
 
-// Ajout des écouteurs d'événement
-document.getElementById("instrumentPiano").addEventListener("click", () => changerInstrument("piano"));
-document.getElementById("instrumentViolon").addEventListener("click", () => changerInstrument("violon"));
-document.getElementById("instrumentGuitare").addEventListener("click", () => changerInstrument("guitare"));
+// Boutons d’instruments
+document.getElementById("pianoBtn").addEventListener("click", () => changerInstrument("piano"));
+document.getElementById("violonBtn").addEventListener("click", () => changerInstrument("violon"));
+document.getElementById("guitarBtn").addEventListener("click", () => changerInstrument("guitare"));
 
-// Initialisation avec l'instrument par défaut
-changerInstrument("Piano")
+// Init avec instrument par défaut
+changerInstrument("piano");
