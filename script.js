@@ -125,16 +125,17 @@ function renderParsed(events, errors) {
     const count = Array.isArray(events) ? events.length : 0;
     let html = '';
     if (count > 0) {
+        const linesText = events.slice(0, 100)
+            .map((ev) => `  { note: "${ev.note}", duration: ${ev.duration} },`)
+            .join('\n');
+        const arrayText = `const parsedNotes = [\n${linesText}\n];`;
         html += '<div class="notes">';
         html += `<strong>${count} notes parsées</strong>`;
-        html += '<ul>';
-        events.slice(0, 100).forEach((ev) => {
-            html += `<li>${ev.note} — ${ev.durationSec}s</li>`;
-        });
+        html += `<pre>${arrayText}</pre>`;
         if (events.length > 100) {
-            html += `<li>… (+${events.length - 100} autres)</li>`;
+            html += `<div style="margin-top:4px;color:#6e6e73;">… (+${events.length - 100} autres)</div>`;
         }
-        html += '</ul></div>';
+        html += '</div>';
     } else {
         html += '<div class="error">Aucune note valide trouvée.</div>';
     }
@@ -143,7 +144,4 @@ function renderParsed(events, errors) {
     }
     importFeedback.innerHTML = html;
 }
-
-
-const synth2 = new Tone.Synth().toDestination();
 
