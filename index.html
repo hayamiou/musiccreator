@@ -27,8 +27,6 @@
       position: absolute;
     }
 
-
-
     .violonBox {
       position: relative;
     }
@@ -39,11 +37,11 @@
   <h1>Synthé Tone.js</h1>
   <div class="instructions">
     <p>Maintiens la touche <strong>A</strong> pour jouer une note (diminue le temps).</p>
-    <p>Appuie sur la touche <strong>S</strong> pour moduler la note et ajouter du temps (max 2s).</p>
+    <p>Appuie sur la touche <strong>Q</strong> pour moduler la note et ajouter du temps (max 2s).</p>
+    <p>Appuie sur la touche <strong>S</strong> en même temps pour ajouter 100 Hz à la note en cours.</p>
     <p>(Optionnel) Appuie sur <strong>R</strong> pour réinitialiser le timer.</p>
     <p>position arché</p>
     <p id="position">X</p>
-
 
     <div class="violonBox">
       <div class="violon">
@@ -59,6 +57,7 @@
     const synth = new Tone.Synth().toDestination();
 
     let isKeyAPressed = false;
+    let isKeyQPressed = false;
     let isKeySPressed = false;
     let currentFrequency = 440;
 
@@ -69,20 +68,19 @@
     let addInterval;
     let updateInterval;
 
-function setPositionArche(value) {
-    document.getElementById("position").textContent = (value / 1000).toFixed(2) + "s";
-    const arche = document.getElementById("arche");
-    const maxMovement = 200;
-    const movement = maxMovement * (value / totalDuration);
-    arche.style.transform = `translateY(${movement}px)`;
-}
+    function setPositionArche(value) {
+      document.getElementById("position").textContent = (value / 1000).toFixed(2) + "s";
+      const arche = document.getElementById("arche");
+      const maxMovement = 200;
+      const movement = maxMovement * (value / totalDuration);
+      arche.style.transform = `translateY(${movement}px)`;
+    }
 
-    // Smoothly update remainingTime display
     function startUpdatingPosition() {
       clearInterval(updateInterval);
       updateInterval = setInterval(() => {
-        if (isKeyAPressed || isKeySPressed) {
-          if (isKeyAPressed && startTime) {
+        if (isKeyAPressed || isKeyQPressed) {
+          if (isKeyAPressed || isKeyQPressed && startTime) {
             const played = Date.now() - startTime;
             setPositionArche(Math.max(remainingTime - played, 0));
           } else {
@@ -104,6 +102,7 @@ function setPositionArche(value) {
       noteTimeout = setTimeout(() => {
         synth.triggerRelease();
         isKeyAPressed = false;
+        isKeyQPressed = false;
         remainingTime = 0;
         setPositionArche(remainingTime);
       }, remainingTime);
@@ -131,7 +130,7 @@ function setPositionArche(value) {
       synth.triggerAttack(currentFrequency);
 
       addInterval = setInterval(() => {
-        if (!isKeySPressed || remainingTime >= totalDuration) {
+        if (!isKeyQPressed || remainingTime >= totalDuration) {
           synth.triggerRelease();
           clearInterval(addInterval);
           return;
@@ -147,17 +146,22 @@ function setPositionArche(value) {
     document.addEventListener('keydown', (e) => {
       const key = e.key.toLowerCase();
 
-      // Prevent pressing A and S at the same time
-      if (key === 'a' && !isKeyAPressed && !isKeySPressed && remainingTime > 0) {
+      if (key === 'a' && !isKeyAPressed && remainingTime > 0) {
         isKeyAPressed = true;
         currentFrequency = 440;
         startNote();
       }
 
-      if (key === 's' && !isKeySPressed && !isKeyAPressed && remainingTime < totalDuration) {
-        isKeySPressed = true;
-        currentFrequency = 550;
+      if (key === 'q' && !isKeyQPressed && remainingTime < totalDuration) {
+        isKeyQPressed = true;
+        currentFrequency = 440;
         startNoteAddingTime();
+      }
+
+      if (key === 's' && (isKeyAPressed || isKeyQPressed) && !isKeySPressed) {
+        isKeySPressed = true;
+        currentFrequency += 100;
+        synth.set({ frequency: currentFrequency });
       }
 
       if (key === 'r') {
@@ -175,11 +179,19 @@ function setPositionArche(value) {
         stopNote();
       }
 
-      if (key === 's') {
-        isKeySPressed = false;
+      if (key === 'q') {
+        isKeyQPressed = false;
         synth.triggerRelease();
         clearInterval(addInterval);
         currentFrequency = 440;
+      }
+
+      if (key === 's' && isKeySPressed) {
+        isKeySPressed = false;
+        currentFrequency -= 100;
+        if (isKeyAPressed || isKeyQPressed) {
+          synth.set({ frequency: currentFrequency });
+        }
       }
     });
 
