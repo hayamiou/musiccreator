@@ -1,4 +1,3 @@
-const synth = new Tone.Synth().toDestination();
 
 class note {
   note;
@@ -145,5 +144,4 @@ function renderParsed(events, errors) {
 }
 
 
-const synth2 = new Tone.Synth().toDestination();
 

@@ -8,6 +8,9 @@ const sons = {
 
 const notes = ["A4", "B4", "C4", "D4"];
 
+
+
+
 // Sampler global (sera recréé quand on change d’instrument)
 let sampler;
 
@@ -46,4 +49,4 @@ document.getElementById("violinBtn").addEventListener("click", () => changerInst
 document.getElementById("guitarBtn").addEventListener("click", () => changerInstrument("guitare"));
 
 // Init avec instrument par défaut
-changerInstrument("piano");
+changerInstrument("violon");
