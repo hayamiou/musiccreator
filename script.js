@@ -1,21 +1,5 @@
 const synth = new Tone.Synth().toDestination();
 
-function importFile() {
-  const file = document.getElementById("musicFile");
-  const fileImported = file.files[0];
-  console.log(file);
-  console.log(fileImported.value);
-
-  const reader = new FileReader();
-
-  reader.onload = (event) => {
-    const content = event.target.result;
-    console.log(convertTxtToMusic(content));
-  };
-
-  reader.readAsText(fileImported, "utf-8");
-}
-
 class note {
   note;
   length;
@@ -25,18 +9,7 @@ class note {
   }
 }
 
-function convertTxtToMusic(input) {
-  let notes = [];
-  const abc = input.split("\n");
-
-  console.log(abc);
-
-  abc.forEach((element) => {
-    notes.push(new note(element.split(" ")[0], element.split(" ")[1]));
-  });
-
-  console.log(notes);
-}
+// legacy conversion removed in favor of parsing.js
 
 const instrumentButtons = document.querySelectorAll(".instrument-btn");
 let currentInstrument = "piano";
@@ -61,6 +34,7 @@ const importDropdown = document.getElementById('importDropdown');
 const chooseFileBtn = document.getElementById('chooseFileBtn');
 const fileInput = document.getElementById('fileInput');
 const dropzone = document.getElementById('dropzone');
+const importFeedback = document.getElementById('importFeedback');
 
 function closeImportDropdown() {
     if (importDropdown && importToggle) {
@@ -88,6 +62,10 @@ if (importToggle && importDropdown) {
 
 if (chooseFileBtn && fileInput) {
     chooseFileBtn.addEventListener('click', () => fileInput.click());
+    fileInput.addEventListener('change', () => {
+        const file = fileInput.files && fileInput.files[0];
+        handleImport(file);
+    });
 }
 
 if (dropzone) {
@@ -103,8 +81,67 @@ if (dropzone) {
             e.preventDefault();
             dropzone.style.borderColor = 'rgba(0,0,0,0.12)';
             dropzone.style.background = '#f7f7fa';
+            if (evt === 'drop') {
+                const dt = e.dataTransfer;
+                const file = dt && dt.files && dt.files[0];
+                handleImport(file);
+            }
         });
     });
+}
+
+function handleImport(file) {
+    clearFeedback();
+    const isTxt = file && (file.type === 'text/plain' || (file.name && file.name.toLowerCase().endsWith('.txt')));
+    if (!isTxt) {
+        showError('Veuillez sélectionner un fichier .txt valide.');
+        return;
+    }
+    const reader = new FileReader();
+    reader.onload = (event) => {
+        const content = event.target.result;
+        try {
+            const result = window.parseScoreWithReport ? window.parseScoreWithReport(content) : { events: [], errors: ['Parser indisponible'] };
+            renderParsed(result.events, result.errors);
+        } catch (err) {
+            showError('Erreur lors du parsing.');
+            console.error(err);
+        }
+    };
+    reader.readAsText(file, 'utf-8');
+}
+
+function clearFeedback() {
+    if (importFeedback) importFeedback.innerHTML = '';
+}
+
+function showError(message) {
+    if (!importFeedback) return;
+    importFeedback.innerHTML = `<div class="error">${message}</div>`;
+}
+
+function renderParsed(events, errors) {
+    if (!importFeedback) return;
+    const count = Array.isArray(events) ? events.length : 0;
+    let html = '';
+    if (count > 0) {
+        html += '<div class="notes">';
+        html += `<strong>${count} notes parsées</strong>`;
+        html += '<ul>';
+        events.slice(0, 100).forEach((ev) => {
+            html += `<li>${ev.note} — ${ev.durationSec}s</li>`;
+        });
+        if (events.length > 100) {
+            html += `<li>… (+${events.length - 100} autres)</li>`;
+        }
+        html += '</ul></div>';
+    } else {
+        html += '<div class="error">Aucune note valide trouvée.</div>';
+    }
+    if (Array.isArray(errors) && errors.length > 0) {
+        html += `<div style="margin-top:8px;color:#6e6e73;">${errors.length} lignes ignorées.</div>`;
+    }
+    importFeedback.innerHTML = html;
 }
 
 

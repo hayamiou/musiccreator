@@ -42,7 +42,7 @@ const selection = document.getElementById("selection");
 
 // Boutons d’instruments
 document.getElementById("pianoBtn").addEventListener("click", () => changerInstrument("piano"));
-document.getElementById("violonBtn").addEventListener("click", () => changerInstrument("violon"));
+document.getElementById("violinBtn").addEventListener("click", () => changerInstrument("violon"));
 document.getElementById("guitarBtn").addEventListener("click", () => changerInstrument("guitare"));
 
 // Init avec instrument par défaut
