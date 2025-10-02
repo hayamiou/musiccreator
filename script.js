@@ -101,7 +101,7 @@ function handleImport(file) {
         const content = event.target.result;
         try {
             const result = window.parseScoreWithReport ? window.parseScoreWithReport(content) : { events: [], errors: ['Parser indisponible'] };
-            renderParsed(result.events, result.errors);
+            renderParsed(result.events, result.errors, file && file.name ? file.name : undefined);
         } catch (err) {
             showError('Erreur lors du parsing.');
             console.error(err);
@@ -187,16 +187,19 @@ if (pauseParsedBtn) {
 
 // Capture des événements parsés depuis renderParsed
 const _origRenderParsed = renderParsed;
-renderParsed = function(events, errors) {
+renderParsed = function(events, errors, filename) {
     parsedEvents = Array.isArray(events) ? events : [];
-    _origRenderParsed(events, errors);
+    _origRenderParsed(events, errors, filename);
 };
 
-function renderParsed(events, errors) {
+function renderParsed(events, errors, filename) {
     if (!importFeedback) return;
     const count = Array.isArray(events) ? events.length : 0;
     console.log('Parsed notes:', events);
     let html = '';
+    if (filename) {
+        html += `<div style="margin-bottom:6px;color:#1d1d1f;"><strong>Fichier :</strong> ${filename}</div>`;
+    }
     if (!count) {
         html += '<div class="error">Aucune note valide trouvée.</div>';
     }
