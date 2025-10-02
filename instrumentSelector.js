@@ -32,13 +32,13 @@ notes.forEach((note) => {
 
 // Changement d’instrument
 function changerInstrument(instrument) {
-    selection.textContent = "Sélectionné : " + instrument;
+    //selection.textContent = "Sélectionné : " + instrument;
     createSampler(instrument);
     console.log("Instrument changé pour :", instrument);
 }
 
 // Récupération du texte de sélection
-const selection = document.getElementById("selection");
+//const selection = document.getElementById("selection");
 
 // Boutons d’instruments
 document.getElementById("pianoBtn").addEventListener("click", () => changerInstrument("piano"));
