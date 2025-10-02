@@ -6,7 +6,7 @@ const sons = {
 };
 
 
-const notes = ["A4", "B4", "C4", "D4"];
+const notes = ["C4", "D4", "E4", "F4"];
 
 // Sampler global (sera recréé quand on change d’instrument)
 let sampler;
