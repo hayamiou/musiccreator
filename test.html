@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Play Parsed Sequence</title>
+  <script src="https://unpkg.com/tone"></script>
+</head>
+<body>
+  <button id="play">▶ Play</button>
+
+  <script>
+    const synth = new Tone.Synth().toDestination();
+
+    // Exemple de données parsées (notes + durées en secondes)
+    const parsedSequence = [
+      { note: "E7", duration: 0.083 },
+      { note: "0", duration: 0.083 },
+      { note: "0", duration: 0.083 },
+      { note: "C7", duration: 0.083 },
+      { note: "0", duration: 0.083 },
+      { note: "G7", duration: 0.111 },
+      { note: "0", duration: 0.111 },
+      { note: "A7", duration: 0.083 },
+      { note: "0", duration: 0.083 },
+      { note: "C7", duration: 0.083 }
+    ];
+
+    // Construire un tableau d'événements (temps absolu + note + durée)
+    let currentTime = 0;
+    const events = parsedSequence.map(ev => {
+      const event = { time: currentTime, note: ev.note, duration: ev.duration };
+      currentTime += ev.duration;
+      return event;
+    });
+
+    // Créer une Part pour jouer la séquence
+    const part = new Tone.Part((time, value) => {
+      if (value.note !== "0") { // 0 = silence
+        synth.triggerAttackRelease(value.note, value.duration, time);
+      }
+    }, events).start(0);
+
+    // Démarrage avec le bouton
+    document.getElementById("play").addEventListener("click", async () => {
+      await Tone.start();
+      Tone.Transport.start();
+    });
+  </script>
+</body>
+</html>

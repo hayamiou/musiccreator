@@ -34,12 +34,12 @@
     const durationToken = parts[1];
 
     if (!isValidNoteToken(noteToken)) return null;
-    const durationSec = tryParseDurationSeconds(durationToken);
-    if (durationSec == null) return null;
+    const duration = tryParseDurationSeconds(durationToken);
+    if (duration == null) return null;
 
     return {
       note: noteToken.trim().toUpperCase(),
-      durationSec,
+      duration,
       isSilence: isSilence(noteToken)
     };
   }
@@ -79,5 +79,6 @@
   window.parseScoreWithReport = parseScoreWithReport;
   window.__scoreParser = { isValidNoteToken, parseLine, isSilence };
 })();
+
 
 
