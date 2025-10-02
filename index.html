@@ -1,73 +1,192 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Synthé Tone.js</title>
-    <script src="https://cdn.jsdelivr.net/npm/tone@14.7.77/build/Tone.min.js"></script>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            text-align: center;
-            margin-top: 50px;
-        }
-        .instructions {
-            margin-bottom: 20px;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Synthé Tone.js</title>
+  <script src="https://cdn.jsdelivr.net/npm/tone@14.7.77/build/Tone.min.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin-top: 50px;
+    }
+
+    .instructions {
+      margin-bottom: 20px;
+    }
+
+    #arche {
+      position: absolute;
+      margin-left: 180px;
+      margin-top: -100px;
+    }
+
+    .violon {
+      position: absolute;
+    }
+
+
+
+    .violonBox {
+      position: relative;
+    }
+  </style>
 </head>
+
 <body>
-    <h1>Synthé Tone.js</h1>
-    <div class="instructions">
-        <p>Maintiens la touche <strong>A</strong> pour jouer une note.</p>
-        <p>Appuie sur la touche <strong>S</strong> pour moduler la note (changer sa fréquence).</p>
+  <h1>Synthé Tone.js</h1>
+  <div class="instructions">
+    <p>Maintiens la touche <strong>A</strong> pour jouer une note (diminue le temps).</p>
+    <p>Appuie sur la touche <strong>S</strong> pour moduler la note et ajouter du temps (max 2s).</p>
+    <p>(Optionnel) Appuie sur <strong>R</strong> pour réinitialiser le timer.</p>
+    <p>position arché</p>
+    <p id="position">X</p>
+
+
+    <div class="violonBox">
+      <div class="violon">
+        <img src="./violon.svg" alt="My Happy SVG" />
+      </div>
+      <div id="arche">
+        <img src="./arche.svg" alt="My Happy SVG" />
+      </div>
     </div>
+  </div>
 
-    <script>
-        const synth = new Tone.Synth().toDestination();
+  <script>
+    const synth = new Tone.Synth().toDestination();
 
-        let isKeyAPressed = false;
-        let isKeySPressed = false;
-        let currentFrequency = 440;
+    let isKeyAPressed = false;
+    let isKeySPressed = false;
+    let currentFrequency = 440;
 
-document.addEventListener('keydown', (e) => {
-    if (e.key.toLowerCase() === 'a' && !isKeyAPressed) {
-        isKeyAPressed = true;
-        synth.triggerAttack(currentFrequency);
-    }
-    if (e.key.toLowerCase() === 's' && !isKeySPressed) {
-        isKeySPressed = true;
-        currentFrequency = 550; 
-        if (isKeyAPressed) {
-            synth.setNote(currentFrequency);
+    const totalDuration = 2000;
+    let remainingTime = totalDuration;
+    let noteTimeout;
+    let startTime;
+    let addInterval;
+    let updateInterval;
+
+function setPositionArche(value) {
+    document.getElementById("position").textContent = (value / 1000).toFixed(2) + "s";
+    const arche = document.getElementById("arche");
+    const maxMovement = 200;
+    const movement = maxMovement * (value / totalDuration);
+    arche.style.transform = `translateY(${movement}px)`;
+}
+
+    // Smoothly update remainingTime display
+    function startUpdatingPosition() {
+      clearInterval(updateInterval);
+      updateInterval = setInterval(() => {
+        if (isKeyAPressed || isKeySPressed) {
+          if (isKeyAPressed && startTime) {
+            const played = Date.now() - startTime;
+            setPositionArche(Math.max(remainingTime - played, 0));
+          } else {
+            setPositionArche(remainingTime);
+          }
+        } else {
+          clearInterval(updateInterval);
         }
+      }, 30); // update ~33 times per second
     }
-});
 
-document.addEventListener('keyup', (e) => {
-    if (e.key.toLowerCase() === 'a') {
-        isKeyAPressed = false;
+    function startNote() {
+      if (remainingTime <= 0) return;
+
+      synth.triggerAttack(currentFrequency);
+      startTime = Date.now();
+
+      clearTimeout(noteTimeout);
+      noteTimeout = setTimeout(() => {
         synth.triggerRelease();
+        isKeyAPressed = false;
+        remainingTime = 0;
+        setPositionArche(remainingTime);
+      }, remainingTime);
+
+      startUpdatingPosition();
     }
-    if (e.key.toLowerCase() === 's') {
-        isKeySPressed = false;
-        currentFrequency = 440;
-        if (isKeyAPressed) {
-            synth.setNote(currentFrequency);
+
+    function stopNote() {
+      synth.triggerRelease();
+
+      if (startTime) {
+        const played = Date.now() - startTime;
+        remainingTime -= played;
+        if (remainingTime < 0) remainingTime = 0;
+      }
+
+      setPositionArche(remainingTime);
+      clearTimeout(noteTimeout);
+      startTime = null;
+    }
+
+    function startNoteAddingTime() {
+      if (remainingTime >= totalDuration) return;
+
+      synth.triggerAttack(currentFrequency);
+
+      addInterval = setInterval(() => {
+        if (!isKeySPressed || remainingTime >= totalDuration) {
+          synth.triggerRelease();
+          clearInterval(addInterval);
+          return;
         }
+
+        remainingTime += 50;
+        if (remainingTime > totalDuration) remainingTime = totalDuration;
+      }, 50);
+
+      startUpdatingPosition();
     }
-});
 
+    document.addEventListener('keydown', (e) => {
+      const key = e.key.toLowerCase();
 
-        document.addEventListener('keyup', (e) => {
-            if (e.key.toLowerCase() === 'a' && isKeyAPressed) {
-                isKeyAPressed = false;
-                synth.triggerRelease();
-            }
-            if (e.key.toLowerCase() === 's') {
-                isKeySPressed = false;
-            }
-        });
-    </script>
+      // Prevent pressing A and S at the same time
+      if (key === 'a' && !isKeyAPressed && !isKeySPressed && remainingTime > 0) {
+        isKeyAPressed = true;
+        currentFrequency = 440;
+        startNote();
+      }
+
+      if (key === 's' && !isKeySPressed && !isKeyAPressed && remainingTime < totalDuration) {
+        isKeySPressed = true;
+        currentFrequency = 550;
+        startNoteAddingTime();
+      }
+
+      if (key === 'r') {
+        remainingTime = totalDuration;
+        setPositionArche(remainingTime);
+        console.log("Timer réinitialisé : 2s de nouveau disponibles");
+      }
+    });
+
+    document.addEventListener('keyup', (e) => {
+      const key = e.key.toLowerCase();
+
+      if (key === 'a') {
+        isKeyAPressed = false;
+        stopNote();
+      }
+
+      if (key === 's') {
+        isKeySPressed = false;
+        synth.triggerRelease();
+        clearInterval(addInterval);
+        currentFrequency = 440;
+      }
+    });
+
+    // Initialize display
+    setPositionArche(remainingTime);
+  </script>
+
 </body>
+
 </html>
