@@ -237,7 +237,7 @@ body {
 .dropzone {
   position: relative;
   width: 100%;
-  min-height: 160px;
+  min-height: 40px;
   background: #f7f7fa;
   border: 2px dashed rgba(0, 0, 0, 0.12);
   border-radius: 14px;
