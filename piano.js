@@ -7,12 +7,11 @@ const sons = {
     "https://raw.githubusercontent.com/hayamiou/musiccreator/synthToPiano/assets/guitar/guitar_C7.wav ",
 };
 
-// Sampler global (sera recréé quand on change d’instrument)
-let sampler;
+
 
 // Fonction pour créer un sampler pour l’instrument choisi
 async function createSampler(instrument) {
-  sampler = new Tone.Sampler({
+  window.currentSampler = new Tone.Sampler({
     C7: sons[instrument],
   }).toDestination();
 }
@@ -43,9 +42,6 @@ document
 // Init avec instrument par défaut
 changerInstrument("piano");
 
-(function initExpose() {
-  window.currentSampler = sampler;
-})();
 
 document.getElementById("pianoBtn").click();
 
@@ -83,7 +79,7 @@ async function playNote(note) {
     return;
   } */
   await Tone.start();
-  sampler.triggerAttackRelease(note, "1n");
+  window.currentSampler.triggerAttackRelease(note, "1n");
   console.log(`Note ${note} jouée !`);
 }
 
