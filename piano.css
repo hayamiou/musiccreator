@@ -6,6 +6,7 @@
 #piano {
   flex-direction: column;
   align-items: center;
+  height: 400px;
 }
 
 .white {
@@ -55,4 +56,11 @@
 .highlight {
   background-color: blueviolet !important;
   border-width: 20px;
+}
+
+.circle {
+  width: 15px;
+  height: 15px;
+  background: red;
+  border-radius: 50px;
 }

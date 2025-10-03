@@ -71,10 +71,6 @@
 
     <p>Touches noires : <strong>A Z E R T Y U I O P</strong></p>
     <p>Touches blanches : <strong>Q S D F G H J K L M N , ; : !</strong></p>
-
-    <button onclick="start_enregistrement()">Enregistrer</button>
-    <button onclick="stop_enregistrement()">Arrêter d'enregistrer</button>
-    <button onclick="telechargement_enregistrement()">Télécharger l'enregistrement</button>
     
     <div class="keys black">
       <div class="touche_noire" id="C#6">A <br/>C#6</div>
@@ -107,6 +103,12 @@
       <div class="touche_blanche" id="C8">! <br/>C8</div>
     </div>
   </div>
+
+  <div class="recordingBtn">
+      <button onclick="start_enregistrement()" id="startRecBtn"><div class="circle" id="circle"></div></button>
+      <button onclick="stop_enregistrement()">Arrêter d'enregistrer</button>
+      <button onclick="telechargement_enregistrement()">Télécharger l'enregistrement</button>
+    </div>
 
   <!-- CDN Tone.js -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>

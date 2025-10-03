@@ -128,7 +128,18 @@ let record = [];
 function start_enregistrement() {
   isRecording = true;
   lastRelease = performance.now();
+  const recBtn = document.getElementById("startRecBtn");
+  const redCircle = document.getElementById("circle");
+  recBtn.innerHTML = "Recording";
+  recBtn.style.border = "2px solid red";
+  redCircle.style.display = "none";
 }
+
+let defaultBtnText;
+
+window.onload = () => {
+  defaultBtnText = document.getElementById("startRecBtn").innerHTML;
+};
 
 function stop_enregistrement() {
   isRecording = false;
@@ -137,6 +148,11 @@ function stop_enregistrement() {
   record.push("0 ");
   record.push(gap);
   record.push("\n");
+  const recBtn = document.getElementById("startRecBtn");
+  const redCircle = document.getElementById("circle");
+  recBtn.innerHTML = defaultBtnText;
+  recBtn.style.border = "1px solid rgba(0, 0, 0, 0.08)";
+  redCircle.style.display = "block";
 }
 
 function telechargement_enregistrement() {

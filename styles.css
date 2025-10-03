@@ -434,3 +434,7 @@ button:active {
   background-color: blueviolet;
   border-width: 20px;
 }
+
+.recordingBtn {
+  margin-top: 5px;
+}
