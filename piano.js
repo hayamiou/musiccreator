@@ -1,4 +1,3 @@
-
 const sons = {
   violon:
     "https://raw.githubusercontent.com/hayamiou/musiccreator/synthToPiano/assets/violin/violin_C7_v2.wav",
@@ -13,11 +12,9 @@ let sampler;
 
 // Fonction pour créer un sampler pour l’instrument choisi
 async function createSampler(instrument) {
-    sampler = new Tone.Sampler(
-        {
-            "C7": sons[instrument]
-        }
-    ).toDestination();
+  sampler = new Tone.Sampler({
+    C7: sons[instrument],
+  }).toDestination();
 }
 
 // Changement d’instrument
@@ -30,9 +27,7 @@ function changerInstrument(instrument) {
     selectPiano.style.display = "flex";
   } else {
     selectPiano.style.display = "none";*/
-  } 
-
-
+}
 
 // Boutons d’instruments
 document
@@ -53,9 +48,6 @@ changerInstrument("piano");
 })();
 
 document.getElementById("pianoBtn").click();
-
-
-
 
 const keys = {
   q: "C6",
@@ -85,18 +77,15 @@ const keys = {
   p: "A#7",
 };
 
-
-
 async function playNote(note) {
   /* const selectPiano = document.getElementById("piano");
   if (window.getComputedStyle(selectPiano).display === "none") {
     return;
   } */
   await Tone.start();
-    sampler.triggerAttackRelease(note, "1n");
-    console.log(`Note ${note} jouée !`);
+  sampler.triggerAttackRelease(note, "1n");
+  console.log(`Note ${note} jouée !`);
 }
-
 
 document.addEventListener("keydown", (e) => {
   const key = e.key.toLowerCase();
@@ -145,6 +134,7 @@ let isRecording = false;
 let record = [];
 
 function start_enregistrement() {
+  record = [];
   isRecording = true;
   lastRelease = performance.now();
   const recBtn = document.getElementById("startRecBtn");
