@@ -180,7 +180,14 @@ class note {
       if (value.note !== "0") {
         const sampler = window.currentSampler;
         if (sampler && sampler.loaded) {
+          const keyEl = document.getElementById(value.note);
           sampler.triggerAttackRelease(value.note, "1n", time);
+          if (keyEl){
+            keyEl.classList.add("highlight");
+            setTimeout(() => keyEl.classList.remove("highlight"), 300);
+          }
+          
+
         } else {
           const synthTmp = new Tone.Synth().toDestination();
           synthTmp.triggerAttackRelease(value.note, "1n", time);
