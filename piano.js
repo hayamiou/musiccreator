@@ -71,12 +71,9 @@ const keys = {
 };
 
 async function playNote(note) {
-  /* const selectPiano = document.getElementById("piano");
-  if (window.getComputedStyle(selectPiano).display === "none") {
-    return;
-  } */
   await Tone.start();
-  window.currentSampler.triggerAttackRelease(note, "1n");
+  window.currentSampler.triggerAttackRelease(note, "1n"); // venant de develop
+  window.gameRegisterUserNote?.(note);                    // ta ligne mini-jeu
   console.log(`Note ${note} jouée !`);
 }
 
