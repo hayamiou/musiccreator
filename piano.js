@@ -90,7 +90,7 @@ async function playNote(note) {
 document.addEventListener("keydown", (e) => {
   const key = e.key.toLowerCase();
   const note = keys[key];
-  if (note) {
+  if (note && isPlayed === undefined) {
     playNote(note);
     isPlayed = note;
     // record.push(note + " ");
