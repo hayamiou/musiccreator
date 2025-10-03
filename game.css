@@ -86,8 +86,22 @@
 /* l’animation des touches utilise ta classe existante .highlight */
 
 /* plus d'espace sous le bloc "Jeu" */
-.game-dock {
-    margin-bottom: 48px; /* 48px d'espace sous le bouton/zone du jeu */
-}
 .game-btn { margin-bottom: 12px; } /* espace sous le bouton lui-même */
+
+/* 1) Remonter le bloc jeu (moins d'espace au-dessus, on garde un peu en-dessous) */
+.game-dock {
+    margin: 8px auto 40px;   /* top 8px (au lieu de 30) ; bottom 40px */
+}
+
+/* 2) Empêcher que le panneau descende sous le viewport :
+      on limite sa hauteur et on le rend scrollable si besoin */
+.game-inline.open {
+    max-height: calc(100vh - 220px);  /* réserve ~220px pour header + clavier */
+    overflow: auto;                    /* scroll interne si le contenu dépasse */
+}
+
+/* 3) (sécurité) si le site a un style global qui bloque le scroll */
+html, body {
+    overflow-y: auto;
+}
 
