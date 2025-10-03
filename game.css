@@ -3,7 +3,7 @@
     flex-direction: column;
     align-items: center;
     gap: 12px;
-    margin: 16px auto 0;
+    margin: 30px auto 0;
 }
 
 .game-btn {
@@ -84,3 +84,10 @@
 }
 
 /* l’animation des touches utilise ta classe existante .highlight */
+
+/* plus d'espace sous le bloc "Jeu" */
+.game-dock {
+    margin-bottom: 48px; /* 48px d'espace sous le bouton/zone du jeu */
+}
+.game-btn { margin-bottom: 12px; } /* espace sous le bouton lui-même */
+
