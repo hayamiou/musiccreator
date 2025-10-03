@@ -1,213 +1,233 @@
-
 class note {
-  note;
-  length;
-  constructor(note, length) {
-    this.note = note;
-    this.length = length;
-  }
-}
-
-// legacy conversion removed in favor of parsing.js
-
-const instrumentButtons = document.querySelectorAll(".instrument-btn");
-let currentInstrument = "piano";
-
-
-instrumentButtons.forEach((button) => {
-  button.addEventListener("click", () => {
-    instrumentButtons.forEach((b) => b.classList.remove("selected"));
-    button.classList.add("selected");
-    currentInstrument = button.getAttribute("data-instrument");
-    console.log("Instrument sélectionné :", currentInstrument);
-  });
-});
-
-const defaultButton = document.querySelector('[data-instrument="piano"]');
-if (defaultButton) {
-    defaultButton.classList.add('selected');
-}
-
-const importToggle = document.getElementById('importToggle');
-const importDropdown = document.getElementById('importDropdown');
-const chooseFileBtn = document.getElementById('chooseFileBtn');
-const fileInput = document.getElementById('fileInput');
-const dropzone = document.getElementById('dropzone');
-const importFeedback = document.getElementById('importFeedback');
-
-function closeImportDropdown() {
-    if (importDropdown && importToggle) {
-        importDropdown.classList.remove('open');
-        importToggle.setAttribute('aria-expanded', 'false');
-        importDropdown.setAttribute('aria-hidden', 'true');
+    note;
+    length;
+    constructor(note, length) {
+      this.note = note;
+      this.length = length;
     }
-}
-
-if (importToggle && importDropdown) {
-    importToggle.addEventListener('click', (e) => {
-        e.stopPropagation();
-        const willOpen = !importDropdown.classList.contains('open');
-        importDropdown.classList.toggle('open', willOpen);
-        importToggle.setAttribute('aria-expanded', String(willOpen));
-        importDropdown.setAttribute('aria-hidden', String(!willOpen));
+  }
+  
+  // legacy conversion removed in favor of parsing.js
+  
+  const instrumentButtons = document.querySelectorAll(".instrument-btn");
+  let currentInstrument = "piano";
+  
+  instrumentButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      instrumentButtons.forEach((b) => b.classList.remove("selected"));
+      button.classList.add("selected");
+      currentInstrument = button.getAttribute("data-instrument");
+      console.log("Instrument sélectionné :", currentInstrument);
     });
-
-    document.addEventListener('click', (e) => {
-        if (!importDropdown.contains(e.target) && e.target !== importToggle) {
-            closeImportDropdown();
+  });
+  
+  const defaultButton = document.querySelector('[data-instrument="piano"]');
+  if (defaultButton) {
+    defaultButton.classList.add("selected");
+  }
+  
+  const importToggle = document.getElementById("importToggle");
+  const importDropdown = document.getElementById("importDropdown");
+  const chooseFileBtn = document.getElementById("chooseFileBtn");
+  const fileInput = document.getElementById("fileInput");
+  const dropzone = document.getElementById("dropzone");
+  const importFeedback = document.getElementById("importFeedback");
+  
+  function closeImportDropdown() {
+    if (importDropdown && importToggle) {
+      importDropdown.classList.remove("open");
+      importToggle.setAttribute("aria-expanded", "false");
+      importDropdown.setAttribute("aria-hidden", "true");
+    }
+  }
+  
+  if (importToggle && importDropdown) {
+    importToggle.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const willOpen = !importDropdown.classList.contains("open");
+      importDropdown.classList.toggle("open", willOpen);
+      importToggle.setAttribute("aria-expanded", String(willOpen));
+      importDropdown.setAttribute("aria-hidden", String(!willOpen));
+    });
+  
+    document.addEventListener("click", (e) => {
+      if (!importDropdown.contains(e.target) && e.target !== importToggle) {
+        closeImportDropdown();
+      }
+    });
+  }
+  
+  if (chooseFileBtn && fileInput) {
+    chooseFileBtn.addEventListener("click", () => fileInput.click());
+    fileInput.addEventListener("change", () => {
+      const file = fileInput.files && fileInput.files[0];
+      handleImport(file);
+    });
+  }
+  
+  if (dropzone) {
+    ["dragenter", "dragover"].forEach((evt) => {
+      dropzone.addEventListener(evt, (e) => {
+        e.preventDefault();
+        dropzone.style.borderColor = "rgba(0,0,0,0.25)";
+        dropzone.style.background = "#ededf3";
+      });
+    });
+    ["dragleave", "drop"].forEach((evt) => {
+      dropzone.addEventListener(evt, (e) => {
+        e.preventDefault();
+        dropzone.style.borderColor = "rgba(0,0,0,0.12)";
+        dropzone.style.background = "#f7f7fa";
+        if (evt === "drop") {
+          const dt = e.dataTransfer;
+          const file = dt && dt.files && dt.files[0];
+          handleImport(file);
         }
+      });
     });
-}
-
-if (chooseFileBtn && fileInput) {
-    chooseFileBtn.addEventListener('click', () => fileInput.click());
-    fileInput.addEventListener('change', () => {
-        const file = fileInput.files && fileInput.files[0];
-        handleImport(file);
-    });
-}
-
-if (dropzone) {
-    ['dragenter', 'dragover'].forEach((evt) => {
-        dropzone.addEventListener(evt, (e) => {
-            e.preventDefault();
-            dropzone.style.borderColor = 'rgba(0,0,0,0.25)';
-            dropzone.style.background = '#ededf3';
-        });
-    });
-    ['dragleave', 'drop'].forEach((evt) => {
-        dropzone.addEventListener(evt, (e) => {
-            e.preventDefault();
-            dropzone.style.borderColor = 'rgba(0,0,0,0.12)';
-            dropzone.style.background = '#f7f7fa';
-            if (evt === 'drop') {
-                const dt = e.dataTransfer;
-                const file = dt && dt.files && dt.files[0];
-                handleImport(file);
-            }
-        });
-    });
-}
-
-function handleImport(file) {
+  }
+  
+  function handleImport(file) {
     clearFeedback();
-    const isTxt = file && (file.type === 'text/plain' || (file.name && file.name.toLowerCase().endsWith('.txt')));
+    const isTxt =
+      file &&
+      (file.type === "text/plain" ||
+        (file.name && file.name.toLowerCase().endsWith(".txt")));
     if (!isTxt) {
-        showError('Veuillez sélectionner un fichier .txt valide.');
-        return;
+      showError("Veuillez sélectionner un fichier .txt valide.");
+      return;
     }
     const reader = new FileReader();
     reader.onload = (event) => {
-        const content = event.target.result;
-        try {
-            const result = window.parseScoreWithReport ? window.parseScoreWithReport(content) : { events: [], errors: ['Parser indisponible'] };
-            renderParsed(result.events, result.errors, file && file.name ? file.name : undefined);
-        } catch (err) {
-            showError('Erreur lors du parsing.');
-            console.error(err);
-        }
+      const content = event.target.result;
+      try {
+        const result = window.parseScoreWithReport
+          ? window.parseScoreWithReport(content)
+          : { events: [], errors: ["Parser indisponible"] };
+        renderParsed(
+          result.events,
+          result.errors,
+          file && file.name ? file.name : undefined
+        );
+      } catch (err) {
+        showError("Erreur lors du parsing.");
+        console.error(err);
+      }
     };
-    reader.readAsText(file, 'utf-8');
-}
-
-function clearFeedback() {
-    if (importFeedback) importFeedback.innerHTML = '';
-}
-
-function showError(message) {
+    reader.readAsText(file, "utf-8");
+  }
+  
+  function clearFeedback() {
+    if (importFeedback) importFeedback.innerHTML = "";
+  }
+  
+  function showError(message) {
     if (!importFeedback) return;
     importFeedback.innerHTML = `<div class="error">${message}</div>`;
-}
-
-let parsedEvents = [];
-let part = null;
-let durationDivider = 1.0;
-
-const durationDividerInput = document.getElementById('durationDivider');
-const durationDividerValue = document.getElementById('durationDividerValue');
-if (durationDividerInput) {
+  }
+  
+  let parsedEvents = [];
+  let part = null;
+  let durationDivider = 1.0;
+  
+  const durationDividerInput = document.getElementById("durationDivider");
+  const durationDividerValue = document.getElementById("durationDividerValue");
+  if (durationDividerInput) {
     const updateDivider = () => {
-        const raw = parseFloat(durationDividerInput.value);
-        durationDivider = Number.isFinite(raw) && raw > 0 ? raw : 1.0;
-        if (durationDividerValue) durationDividerValue.textContent = `${durationDivider.toFixed(1)}×`;
+      const raw = parseFloat(durationDividerInput.value);
+      durationDivider = Number.isFinite(raw) && raw > 0 ? raw : 1.0;
+      if (durationDividerValue)
+        durationDividerValue.textContent = `${durationDivider.toFixed(1)}×`;
     };
-    durationDividerInput.addEventListener('input', updateDivider);
+    durationDividerInput.addEventListener("input", updateDivider);
     updateDivider();
-}
-
-function buildEventsFromParsed(parsedArray) {
+  }
+  
+  function buildEventsFromParsed(parsedArray) {
     let currentTime = 0;
     return parsedArray.map((ev) => {
-        const adjustedDuration = ev.duration / (durationDivider || 1.0);
-        const event = { time: currentTime, note: ev.note, duration: adjustedDuration };
-        currentTime += adjustedDuration;
-        return event;
+      const adjustedDuration = ev.duration / (durationDivider || 1.0);
+      const event = {
+        time: currentTime,
+        note: ev.note,
+        duration: adjustedDuration,
+      };
+      currentTime += adjustedDuration;
+      return event;
     });
-}
-
-function playParsedOnce(parsedArray) {
+  }
+  
+  function playParsedOnce(parsedArray) {
     if (!Array.isArray(parsedArray) || parsedArray.length === 0) return;
     if (part) {
-        part.dispose();
-        part = null;
+      part.dispose();
+      part = null;
     }
     const events = buildEventsFromParsed(parsedArray);
     part = new Tone.Part((time, value) => {
-        if (value.note !== "0") {
-            const sampler = window.currentSampler;
-            if (sampler && sampler.loaded) {
-                sampler.triggerAttackRelease(value.note, value.duration, time);
-            } else {
-                const synthTmp = new Tone.Synth().toDestination();
-                synthTmp.triggerAttackRelease(value.note, value.duration, time);
-            }
+      if (value.note !== "0") {
+        const sampler = window.currentSampler;
+        if (sampler && sampler.loaded) {
+          sampler.triggerAttackRelease(value.note, value.duration, time);
+        } else {
+          const synthTmp = new Tone.Synth().toDestination();
+          synthTmp.triggerAttackRelease(value.note, value.duration, time);
         }
+      }
     }, events).start(0);
     Tone.Transport.stop();
     Tone.Transport.seconds = 0;
     Tone.Transport.start();
-}
-
-const playParsedBtn = document.getElementById('playParsedBtn');
-const pauseParsedBtn = document.getElementById('pauseParsedBtn');
-
-if (playParsedBtn) {
-    playParsedBtn.addEventListener('click', async () => {
-        await Tone.start();
+  }
+  
+  function stopParsed() {
+    Tone.Transport.stop();
+    if (part) {
+      part.dispose();
+      part = null;
+    }
+  }
+  
+  // === Nouveau bouton toggle Play/Stop ===
+  const playToggle = document.getElementById("playToggle");
+  let isPlaying = false;
+  
+  if (playToggle) {
+    playToggle.addEventListener("click", async () => {
+      await Tone.start();
+      if (!isPlaying) {
         playParsedOnce(parsedEvents);
+        playToggle.classList.add("is-playing");
+        isPlaying = true;
+      } else {
+        stopParsed();
+        playToggle.classList.remove("is-playing");
+        isPlaying = false;
+      }
     });
-}
-
-if (pauseParsedBtn) {
-    pauseParsedBtn.addEventListener('click', async () => {
-        await Tone.start();
-        Tone.Transport.pause();
-    });
-}
-
-// Capture des événements parsés depuis renderParsed
-const _origRenderParsed = renderParsed;
-renderParsed = function(events, errors, filename) {
+  }
+  
+  // Capture des événements parsés depuis renderParsed
+  const _origRenderParsed = renderParsed;
+  renderParsed = function (events, errors, filename) {
     parsedEvents = Array.isArray(events) ? events : [];
     _origRenderParsed(events, errors, filename);
-};
-
-function renderParsed(events, errors, filename) {
+  };
+  
+  function renderParsed(events, errors, filename) {
     if (!importFeedback) return;
     const count = Array.isArray(events) ? events.length : 0;
-    console.log('Parsed notes:', events);
-    let html = '';
+    console.log("Parsed notes:", events);
+    let html = "";
     if (filename) {
-        html += `<div style="margin-bottom:6px;color:#1d1d1f;"><strong>Fichier :</strong> ${filename}</div>`;
+      html += `<div style="margin-bottom:6px;color:#1d1d1f;"><strong>Fichier :</strong> ${filename}</div>`;
     }
     if (!count) {
-        html += '<div class="error">Aucune note valide trouvée.</div>';
+      html += '<div class="error">Aucune note valide trouvée.</div>';
     }
     if (Array.isArray(errors) && errors.length > 0) {
-        html += `<div style="margin-top:8px;color:#6e6e73;">${errors.length} lignes ignorées.</div>`;
+      html += `<div style="margin-top:8px;color:#6e6e73;">${errors.length} lignes ignorées.</div>`;
     }
     importFeedback.innerHTML = html;
-}
-
-
-
+  }
+  

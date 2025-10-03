@@ -15,33 +15,37 @@
 
 <body>
 
-    <header class="topbar">
-      <div class="topbar-inner">
-        <div class="brand">MusicaLau</div>
-        <nav class="top-actions">
-          <div class="import-menu">
-            <button id="importToggle" class="import-btn" aria-expanded="false" aria-controls="importDropdown">Importer</button>
-            <div id="importDropdown" class="import-dropdown" role="menu" aria-hidden="true">
-              <div class="import-panel" aria-label="Zone d'import de fichier">
-                <p class="import-hint">Glissez-déposez vos fichiers ou cliquez pour sélectionner</p>
-                <div class="dropzone" id="dropzone" role="button" tabindex="0" aria-label="Déposez vos fichiers ici">
-                  <input type="file" id="fileInput" class="sr-only" multiple aria-hidden="true" />
-                  <span class="drop-icon" aria-hidden="true">⬆</span>
-                  <span class="drop-text">Déposez les fichiers ici</span>
-                </div>
-                <button id="chooseFileBtn" class="choose-btn" aria-label="Choisir un fichier">Choisir un fichier</button>
-                <div id="importFeedback" class="import-feedback" aria-live="polite"></div>
-                <div style="display:flex; gap:8px; margin-top:12px;">
-                  <button id="playParsedBtn" class="primary-btn" aria-label="Lire la séquence importée">▶ Play</button>
-                  <button id="pauseParsedBtn" class="choose-btn" aria-label="Mettre en arret">■ arret</button>
-                </div>
-                
-                <!-- Diviseur de durée -->
-                <div class="duration-divider" style="display:flex; align-items:center; gap:10px; margin-top:16px;">
-                  <label for="durationDivider" style="font-weight:500;">Vitesse (diviseur):</label>
-                  <input type="range" id="durationDivider" min="0.1" max="4" step="0.1" value="1" aria-label="Diviseur de durée" style="width:180px;">
-                  <span id="durationDividerValue" style="color:#6e6e73;">1.0×</span>
-                </div>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="brand">MusicaLau</div>
+      <nav class="top-actions">
+        <div class="import-menu">
+          <button id="importToggle" class="import-btn" aria-expanded="false"
+            aria-controls="importDropdown">Importer</button>
+          <div id="importDropdown" class="import-dropdown" role="menu" aria-hidden="true">
+            <div class="import-panel" aria-label="Zone d'import de fichier">
+              <p class="import-hint">Glissez-déposez vos fichiers ou cliquez pour sélectionner</p>
+              <div class="dropzone" id="dropzone" role="button" tabindex="0" aria-label="Déposez vos fichiers ici">
+                <input type="file" id="fileInput" class="sr-only" multiple aria-hidden="true" />
+                <span class="drop-icon" aria-hidden="true">⬆</span>
+                <span class="drop-text">Déposez les fichiers ici</span>
+              </div>
+              <button id="chooseFileBtn" class="choose-btn" aria-label="Choisir un fichier">Choisir un fichier</button>
+              <div id="importFeedback" class="import-feedback" aria-live="polite"></div>
+              <!-- Bouton Play/Stop -->
+              <button id="playToggle" class="play-toggle">
+                <span class="icon play-icon">▶</span>
+                <span class="icon stop-icon">■</span>
+              </button>
+            </div>
+
+            <!-- Diviseur de durée -->
+            <div class="duration-divider" style="display:flex; align-items:center; gap:10px; margin-top:16px;">
+              <label for="durationDivider" style="font-weight:500;">Vitesse (diviseur):</label>
+              <input type="range" id="durationDivider" min="0.1" max="4" step="0.1" value="1"
+                aria-label="Diviseur de durée" style="width:180px;">
+              <span id="durationDividerValue" style="color:#6e6e73;">1.0×</span>
+            </div>
           </div>
         </div>
       </nav>
@@ -69,34 +73,34 @@
     <p>Touches blanches : <strong>Q S D F G H J K L M N , ; : !</strong></p>
 
     <div class="keys black">
-      <div class="touche_noire" id="C#6">A <br/>C#6</div>
-      <div class="touche_noire" id="D#6">Z <br/>D#6</div>
-      <div class="touche_noire" id="F#6">E <br/>F#6</div>
-      <div class="touche_noire" id="G#6">R <br/>G#6</div>
-      <div class="touche_noire" id="A#6">T <br/>A#6</div>
-      <div class="touche_noire" id="C#7">Y <br/>C#7</div>
-      <div class="touche_noire" id="D#7">U <br/>D#7</div>
-      <div class="touche_noire" id="F#7">I <br/>F#7</div>
-      <div class="touche_noire" id="G#7">O <br/>G#7</div>
-      <div class="touche_noire" id="A#7">P <br/>A#7</div>
+      <div class="touche_noire" id="C#6">A <br />C#6</div>
+      <div class="touche_noire" id="D#6">Z <br />D#6</div>
+      <div class="touche_noire" id="F#6">E <br />F#6</div>
+      <div class="touche_noire" id="G#6">R <br />G#6</div>
+      <div class="touche_noire" id="A#6">T <br />A#6</div>
+      <div class="touche_noire" id="C#7">Y <br />C#7</div>
+      <div class="touche_noire" id="D#7">U <br />D#7</div>
+      <div class="touche_noire" id="F#7">I <br />F#7</div>
+      <div class="touche_noire" id="G#7">O <br />G#7</div>
+      <div class="touche_noire" id="A#7">P <br />A#7</div>
     </div>
 
     <div class="keys white">
-      <div class="touche_blanche" id="C6">Q <br/>C6</div>
-      <div class="touche_blanche" id="D6">S <br/>D6</div>
-      <div class="touche_blanche" id="E6">D <br/>E6</div>
-      <div class="touche_blanche" id="F6">F <br/>F6</div>
-      <div class="touche_blanche" id="G6">G <br/>G6</div>
-      <div class="touche_blanche" id="A6">H <br/>A6</div>
-      <div class="touche_blanche" id="B6">J <br/>B6</div>
-      <div class="touche_blanche" id="C7">K <br/>C7</div>
-      <div class="touche_blanche" id="D7">L <br/>D7</div>
-      <div class="touche_blanche" id="E7">M <br/>E7</div>
-      <div class="touche_blanche" id="F7">N <br/>F7</div>
-      <div class="touche_blanche" id="G7">, <br/>G7</div>
-      <div class="touche_blanche" id="A7">; <br/>A7</div>
-      <div class="touche_blanche" id="B7">: <br/>B7</div>
-      <div class="touche_blanche" id="C8">! <br/>C8</div>
+      <div class="touche_blanche" id="C6">Q <br />C6</div>
+      <div class="touche_blanche" id="D6">S <br />D6</div>
+      <div class="touche_blanche" id="E6">D <br />E6</div>
+      <div class="touche_blanche" id="F6">F <br />F6</div>
+      <div class="touche_blanche" id="G6">G <br />G6</div>
+      <div class="touche_blanche" id="A6">H <br />A6</div>
+      <div class="touche_blanche" id="B6">J <br />B6</div>
+      <div class="touche_blanche" id="C7">K <br />C7</div>
+      <div class="touche_blanche" id="D7">L <br />D7</div>
+      <div class="touche_blanche" id="E7">M <br />E7</div>
+      <div class="touche_blanche" id="F7">N <br />F7</div>
+      <div class="touche_blanche" id="G7">, <br />G7</div>
+      <div class="touche_blanche" id="A7">; <br />A7</div>
+      <div class="touche_blanche" id="B7">: <br />B7</div>
+      <div class="touche_blanche" id="C8">! <br />C8</div>
     </div>
   </div>
 
