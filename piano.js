@@ -81,22 +81,81 @@ function stopNote(note) {
 document.addEventListener("keydown", (e) => {
   const key = e.key.toLowerCase();
   const note = keys[key];
-  if (note && !activeOscillators[note]) {
+  if (note && !activeOscillators[note] && isPlayed === undefined) {
     playNote(note);
-    console.log(note);
+    isPlayed = note;
+    // record.push(note + " ");
+    if (pressStart === null) {
+      const now = performance.now();
+      const gap = (now - lastRelease) / 1000;
+      record.push("0 ");
+      record.push(gap);
+      record.push("\n");
+      pressStart = now;
+    }
     const el = document.getElementById(note);
-    console.log(el)
+    console.log(el);
     el.classList.add("highlight");
   }
 });
 
+let pressStart = null;
 document.addEventListener("keyup", (e) => {
   const key = e.key.toLowerCase();
   const note = keys[key];
   if (note) {
     stopNote(note);
+    if (pressStart !== null) {
+      if (note === isPlayed) {
+        const now = performance.now();
+        const duration = (now - pressStart) / 1000;
+        record.push(isPlayed + " ");
+        record.push(duration);
+        record.push("\n");
+        pressStart = null;
+        lastRelease = now;
+      }
+      isPlayed = undefined;
+    }
     const el = document.getElementById(note);
     if (el) el.classList.remove("highlight");
   }
 });
 
+let isRecording = false;
+let record = [];
+
+function start_enregistrement() {
+  isRecording = true;
+  lastRelease = performance.now();
+}
+
+function stop_enregistrement() {
+  isRecording = false;
+  const now = performance.now();
+  const gap = (now - lastRelease) / 1000;
+  record.push("0 ");
+  record.push(gap);
+  record.push("\n");
+}
+
+function telechargement_enregistrement() {
+  const file = new File(record, "melody.txt", {
+    type: "text/plain",
+  });
+  const url = window.URL.createObjectURL(file);
+
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = "melody.txt";
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+
+  window.URL.revokeObjectURL(url);
+  record = [];
+}
+
+let isPlayed = undefined;
+
+let lastRelease = performance.now();
