@@ -7,8 +7,6 @@ const sons = {
     "https://raw.githubusercontent.com/hayamiou/musiccreator/synthToPiano/assets/guitar/guitar_C7.wav ",
 };
 
-
-
 // Fonction pour créer un sampler pour l’instrument choisi
 async function createSampler(instrument) {
   window.currentSampler = new Tone.Sampler({
@@ -41,7 +39,6 @@ document
 
 // Init avec instrument par défaut
 changerInstrument("piano");
-
 
 document.getElementById("pianoBtn").click();
 
@@ -137,7 +134,8 @@ function simulateKeyRelease(key) {
 
 document.addEventListener("keydown", (e) => {
   const active = document.activeElement;
-  if (active && (active.tagName === "INPUT" || active.tagName === "TEXTAREA")) return;
+  if (active && (active.tagName === "INPUT" || active.tagName === "TEXTAREA"))
+    return;
 
   const key = e.key.toLowerCase();
   const note = keys[key];
@@ -162,7 +160,8 @@ document.addEventListener("keydown", (e) => {
 let pressStart = null;
 document.addEventListener("keyup", (e) => {
   const active = document.activeElement;
-  if (active && (active.tagName === "INPUT" || active.tagName === "TEXTAREA")) return;
+  if (active && (active.tagName === "INPUT" || active.tagName === "TEXTAREA"))
+    return;
   const key = e.key.toLowerCase();
   const note = keys[key];
   if (note) {
@@ -185,6 +184,10 @@ document.addEventListener("keyup", (e) => {
 
 let isRecording = false;
 let record = [];
+let stopRecButton = document.getElementById("stopRecBtn");
+stopRecButton.style.display = "none";
+
+stopRecButton.addEventListener("click", stop_enregistrement);
 
 function start_enregistrement() {
   record = [];
@@ -195,6 +198,7 @@ function start_enregistrement() {
   recBtn.innerHTML = "Recording";
   recBtn.style.border = "2px solid red";
   redCircle.style.display = "none";
+  stopRecButton.style.display = "flex";
 }
 
 let defaultBtnText;
@@ -215,6 +219,8 @@ function stop_enregistrement() {
   recBtn.innerHTML = defaultBtnText;
   recBtn.style.border = "1px solid rgba(0, 0, 0, 0.08)";
   redCircle.style.display = "block";
+  stopRecButton.style.display = "none";
+  stopRecButton.blur();
 }
 
 // === Ajout d'un modal pour choisir le nom du fichier avant téléchargement ===
