@@ -1,18 +1,35 @@
 
+// Correction: Les notes dièses (#) doivent être converties en format "C#6" => "C#6" (OK pour Tone.js), 
+// mais Tone.js attend "C#6" et non "C#6" (donc pas de conversion à faire ici).
+// Cependant, il faut s'assurer que le format est bien "C#6" (et pas "C♯6" ou "C#6" en minuscules).
 
 (function attachParserToWindow() {
-  const NOTE_REGEX = /^[A-G]\d$/; 
+  // Autorise les notes blanches (A6, B7, etc.) et les notes noires (C#6, D#7, etc.)
+  // Tone.js attend "C#6" (et non "C♯6" ni "C#6" en minuscules)
+  const NOTE_REGEX = /^[A-G](#)?\d$/;
+
+  // Convertit une note (ex: c#6, C#6, c6) en format Tone.js (C#6)
+  function normalizeNoteToken(token) {
+    if (!token) return "";
+    let t = String(token).trim().toUpperCase();
+    // Remplace les éventuels dièses unicode par #
+    t = t.replace(/♯/g, "#");
+    // Met la lettre en majuscule, le # si présent, et le chiffre
+    // (déjà fait par toUpperCase, mais on s'assure du format)
+    // Ex: c#6 -> C#6, d6 -> D6
+    return t;
+  }
 
   function isValidNoteToken(token) {
     if (!token) return false;
-    const upper = String(token).trim().toUpperCase();
+    const upper = normalizeNoteToken(token);
     // Accept valid notes and silence (0)
     return NOTE_REGEX.test(upper) || upper === "0";
   }
 
   function isSilence(token) {
     if (!token) return false;
-    return String(token).trim() === "0";
+    return normalizeNoteToken(token) === "0";
   }
 
   function tryParseDurationSeconds(token) {
@@ -37,8 +54,9 @@
     const duration = tryParseDurationSeconds(durationToken);
     if (duration == null) return null;
 
+    // Correction ici : on normalise la note pour que "c#6" devienne "C#6"
     return {
-      note: noteToken.trim().toUpperCase(),
+      note: normalizeNoteToken(noteToken),
       duration,
       isSilence: isSilence(noteToken)
     };
@@ -79,6 +97,4 @@
   window.parseScoreWithReport = parseScoreWithReport;
   window.__scoreParser = { isValidNoteToken, parseLine, isSilence };
 })();
-
-
 
