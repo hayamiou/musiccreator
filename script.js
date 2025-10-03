@@ -134,10 +134,13 @@ class note {
   const durationDividerValue = document.getElementById("durationDividerValue");
   if (durationDividerInput) {
     const updateDivider = () => {
-      const raw = parseFloat(durationDividerInput.value);
-      durationDivider = Number.isFinite(raw) && raw > 0 ? raw : 1.0;
-      if (durationDividerValue)
-        durationDividerValue.textContent = `${durationDivider.toFixed(1)}×`;
+        const raw = parseFloat(durationDividerInput.value);
+        durationDivider = Number.isFinite(raw) && raw > 0 ? raw : 1.0;
+        if (durationDividerValue)
+          durationDividerValue.textContent = `${durationDivider.toFixed(1)}×`;
+      
+        // === Nouveau : ajuster la vitesse en temps réel ===
+        Tone.Transport.bpm.value = 120 * durationDivider;
     };
     durationDividerInput.addEventListener("input", updateDivider);
     updateDivider();
