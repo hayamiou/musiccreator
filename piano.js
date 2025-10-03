@@ -1,11 +1,11 @@
 
 const sons = {
   violon:
-    "https://raw.githubusercontent.com/hayamiou/musiccreator/main/assets/violin/violin_A4.mp3",
+    "https://raw.githubusercontent.com/hayamiou/musiccreator/synthToPiano/assets/violin/violin_C7_v2.wav",
   piano:
-    "https://raw.githubusercontent.com/hayamiou/musiccreator/develop/assets/piano/piano_A4.wav",
+    "https://raw.githubusercontent.com/hayamiou/musiccreator/synthToPiano/assets/piano/piano_C7.mp3",
   guitare:
-    "https://raw.githubusercontent.com/hayamiou/musiccreator/main/assets/guitar/guitar_A4.mp3",
+    "https://raw.githubusercontent.com/hayamiou/musiccreator/synthToPiano/assets/guitar/guitar_C7.wav ",
 };
 
 // Sampler global (sera recréé quand on change d’instrument)
@@ -15,7 +15,7 @@ let sampler;
 async function createSampler(instrument) {
     sampler = new Tone.Sampler(
         {
-            "A4": sons[instrument]
+            "C7": sons[instrument]
         }
     ).toDestination();
 }
