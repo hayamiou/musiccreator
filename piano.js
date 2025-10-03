@@ -87,6 +87,58 @@ async function playNote(note) {
   console.log(`Note ${note} jouée !`);
 }
 
+document.querySelectorAll(".key-button").forEach((button) => {
+  const key = button.dataset.key;
+
+  // Mouse down - simulate key press
+  button.addEventListener("mousedown", (e) => {
+    e.preventDefault();
+    button.classList.add("pressed");
+    simulateKeyPress(key);
+  });
+
+  // Mouse up - simulate key release
+  button.addEventListener("mouseup", (e) => {
+    e.preventDefault();
+    button.classList.remove("pressed");
+    simulateKeyRelease(key);
+  });
+
+  // Mouse leave - also release if pressed
+  button.addEventListener("mouseleave", (e) => {
+    if (button.classList.contains("pressed")) {
+      button.classList.remove("pressed");
+      simulateKeyRelease(key);
+    }
+  });
+});
+
+function simulateKeyPress(key) {
+  const event = new KeyboardEvent("keydown", {
+    key: key,
+    code: `Key${key.toUpperCase()}`,
+    keyCode: key.toUpperCase().charCodeAt(0),
+    which: key.toUpperCase().charCodeAt(0),
+    bubbles: true,
+    cancelable: true,
+  });
+
+  document.dispatchEvent(event);
+}
+
+function simulateKeyRelease(key) {
+  const event = new KeyboardEvent("keyup", {
+    key: key,
+    code: `Key${key.toUpperCase()}`,
+    keyCode: key.toUpperCase().charCodeAt(0),
+    which: key.toUpperCase().charCodeAt(0),
+    bubbles: true,
+    cancelable: true,
+  });
+
+  document.dispatchEvent(event);
+}
+
 document.addEventListener("keydown", (e) => {
   const key = e.key.toLowerCase();
   const note = keys[key];
