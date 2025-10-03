@@ -1,3 +1,62 @@
+
+const sons = {
+  violon:
+    "https://raw.githubusercontent.com/hayamiou/musiccreator/main/assets/violin/violin_A4.mp3",
+  piano:
+    "https://raw.githubusercontent.com/hayamiou/musiccreator/develop/assets/piano/piano_A4.wav",
+  guitare:
+    "https://raw.githubusercontent.com/hayamiou/musiccreator/main/assets/guitar/guitar_A4.mp3",
+};
+
+// Sampler global (sera recréé quand on change d’instrument)
+let sampler;
+
+// Fonction pour créer un sampler pour l’instrument choisi
+async function createSampler(instrument) {
+    sampler = new Tone.Sampler(
+        {
+            "A4": sons[instrument]
+        }
+    ).toDestination();
+}
+
+// Changement d’instrument
+function changerInstrument(instrument) {
+  //selection.textContent = "Sélectionné : " + instrument;
+  createSampler(instrument);
+  console.log("Instrument changé pour :", instrument);
+  /* const selectPiano = document.getElementById("piano");
+  if (instrument === "piano") {
+    selectPiano.style.display = "flex";
+  } else {
+    selectPiano.style.display = "none";*/
+  } 
+
+
+
+// Boutons d’instruments
+document
+  .getElementById("pianoBtn")
+  .addEventListener("click", () => changerInstrument("piano"));
+document
+  .getElementById("violinBtn")
+  .addEventListener("click", () => changerInstrument("violon"));
+document
+  .getElementById("guitarBtn")
+  .addEventListener("click", () => changerInstrument("guitare"));
+
+// Init avec instrument par défaut
+changerInstrument("violon");
+
+(function initExpose() {
+  window.currentSampler = sampler;
+})();
+
+document.getElementById("pianoBtn").click();
+
+
+
+
 const keys = {
   q: "C6",
   s: "D6",
@@ -26,62 +85,23 @@ const keys = {
   p: "A#7",
 };
 
-const audioCtx = new AudioContext();
-const activeOscillators = {};
 
-function noteToFrequency(note) {
-  const notes = [
-    "C",
-    "C#",
-    "D",
-    "D#",
-    "E",
-    "F",
-    "F#",
-    "G",
-    "G#",
-    "A",
-    "A#",
-    "B",
-  ];
-  const match = note.match(/^([A-G]#?)(\d)$/);
-  const pitch = match[1];
-  const octave = parseInt(match[2]);
-  const midi = (octave + 1) * 12 + notes.indexOf(pitch);
-  return 440 * Math.pow(2, (midi - 69) / 12);
-}
 
-function playNote(note) {
-  const selectPiano = document.getElementById("piano");
+async function playNote(note) {
+  /* const selectPiano = document.getElementById("piano");
   if (window.getComputedStyle(selectPiano).display === "none") {
     return;
-  }
-  const freq = noteToFrequency(note);
-  const osc = audioCtx.createOscillator();
-  const gain = audioCtx.createGain();
-  osc.type = "sine";
-  osc.frequency.value = freq;
-  osc.connect(gain);
-  gain.connect(audioCtx.destination);
-  osc.start();
-  activeOscillators[note] = { osc, gain };
+  } */
+  await Tone.start();
+    sampler.triggerAttackRelease(note, "1n");
+    console.log(`Note ${note} jouée !`);
 }
 
-function stopNote(note) {
-  if (activeOscillators[note]) {
-    activeOscillators[note].gain.gain.exponentialRampToValueAtTime(
-      0.0001,
-      audioCtx.currentTime + 0.2
-    );
-    activeOscillators[note].osc.stop(audioCtx.currentTime + 0.2);
-    delete activeOscillators[note];
-  }
-}
 
 document.addEventListener("keydown", (e) => {
   const key = e.key.toLowerCase();
   const note = keys[key];
-  if (note && !activeOscillators[note]) {
+  if (note) {
     playNote(note);
     console.log(note);
     const el = document.getElementById(note);
@@ -94,9 +114,7 @@ document.addEventListener("keyup", (e) => {
   const key = e.key.toLowerCase();
   const note = keys[key];
   if (note) {
-    stopNote(note);
     const el = document.getElementById(note);
     if (el) el.classList.remove("highlight");
   }
 });
-
