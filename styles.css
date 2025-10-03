@@ -236,7 +236,7 @@ body {
 .dropzone {
   position: relative;
   width: 100%;
-  min-height: 160px;
+  min-height: 40px;
   background: #f7f7fa;
   border: 2px dashed rgba(0, 0, 0, 0.12);
   border-radius: 14px;
@@ -432,4 +432,85 @@ button:active {
 .highlight {
   background-color: blueviolet;
   border-width: 20px;
+}
+
+.recordingBtn {
+  margin-top: 5px;
+
+/* === Bouton Play/Stop amélioré === */
+.play-toggle {
+  margin-top: 20px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border: none;
+  background: #1d1d1f;
+  color: white;
+  font-size: 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s ease, background 0.4s ease, box-shadow 0.4s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Hover chic */
+.play-toggle:hover {
+  transform: scale(1.08);
+  background: #2c2c2e;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+}
+
+/* Click */
+.play-toggle:active {
+  transform: scale(0.92);
+}
+
+/* Icônes */
+.play-toggle .icon {
+  position: absolute;
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.play-toggle .play-icon {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.play-toggle .stop-icon {
+  opacity: 0;
+  transform: scale(0.8);
+  font-size: 22px;
+}
+
+/* Quand on est en mode lecture */
+.play-toggle.is-playing {
+  background: rgba(8, 0, 80, 0.6); /* 8, 0, 80, 0.6 */
+  box-shadow: 0 0 0 0 rgba(8, 0, 80, 0.6);
+  animation: pulse-playing 2s infinite;
+}
+
+.play-toggle.is-playing .play-icon {
+  opacity: 0;
+  transform: scale(0.5) rotate(-45deg);
+}
+
+.play-toggle.is-playing .stop-icon {
+  opacity: 1;
+  transform: scale(1) rotate(0deg);
+}
+
+/* Effet pulse fluide */
+@keyframes pulse-playing {
+  0% {
+    box-shadow: 0 0 0 0 rgba(8, 0, 80, 0.6);
+  }
+  50% {
+    box-shadow: 0 0 0 25px rgba(29, 185, 84, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(29, 185, 84, 0);
+  }
 }

@@ -46,7 +46,7 @@ document
   .addEventListener("click", () => changerInstrument("guitare"));
 
 // Init avec instrument par défaut
-changerInstrument("violon");
+changerInstrument("piano");
 
 (function initExpose() {
   window.currentSampler = sampler;
@@ -103,18 +103,94 @@ document.addEventListener("keydown", (e) => {
   const note = keys[key];
   if (note) {
     playNote(note);
-    console.log(note);
+    isPlayed = note;
+    // record.push(note + " ");
+    if (pressStart === null) {
+      const now = performance.now();
+      const gap = (now - lastRelease) / 1000;
+      record.push("0 ");
+      record.push(gap);
+      record.push("\n");
+      pressStart = now;
+    }
     const el = document.getElementById(note);
-    console.log(el)
+    console.log(el);
     el.classList.add("highlight");
   }
 });
 
+let pressStart = null;
 document.addEventListener("keyup", (e) => {
   const key = e.key.toLowerCase();
   const note = keys[key];
   if (note) {
+    if (pressStart !== null) {
+      if (note === isPlayed) {
+        const now = performance.now();
+        const duration = (now - pressStart) / 1000;
+        record.push(isPlayed + " ");
+        record.push(duration);
+        record.push("\n");
+        pressStart = null;
+        lastRelease = now;
+      }
+      isPlayed = undefined;
+    }
     const el = document.getElementById(note);
     if (el) el.classList.remove("highlight");
   }
 });
+
+let isRecording = false;
+let record = [];
+
+function start_enregistrement() {
+  isRecording = true;
+  lastRelease = performance.now();
+  const recBtn = document.getElementById("startRecBtn");
+  const redCircle = document.getElementById("circle");
+  recBtn.innerHTML = "Recording";
+  recBtn.style.border = "2px solid red";
+  redCircle.style.display = "none";
+}
+
+let defaultBtnText;
+
+window.onload = () => {
+  defaultBtnText = document.getElementById("startRecBtn").innerHTML;
+};
+
+function stop_enregistrement() {
+  isRecording = false;
+  const now = performance.now();
+  const gap = (now - lastRelease) / 1000;
+  record.push("0 ");
+  record.push(gap);
+  record.push("\n");
+  const recBtn = document.getElementById("startRecBtn");
+  const redCircle = document.getElementById("circle");
+  recBtn.innerHTML = defaultBtnText;
+  recBtn.style.border = "1px solid rgba(0, 0, 0, 0.08)";
+  redCircle.style.display = "block";
+}
+
+function telechargement_enregistrement() {
+  const file = new File(record, "melody.txt", {
+    type: "text/plain",
+  });
+  const url = window.URL.createObjectURL(file);
+
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = "melody.txt";
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+
+  window.URL.revokeObjectURL(url);
+  record = [];
+}
+
+let isPlayed = undefined;
+
+let lastRelease = performance.now();
