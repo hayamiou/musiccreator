@@ -84,6 +84,7 @@ async function playNote(note) {
   } */
   await Tone.start();
   sampler.triggerAttackRelease(note, "1n");
+  window.gameRegisterUserNote?.(note);
   console.log(`Note ${note} jouée !`);
 }
 
