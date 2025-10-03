@@ -435,8 +435,6 @@ button:active {
   border-width: 20px;
 }
 
-.recordingBtn {
-  margin-top: 5px;
 
 /* === Bouton Play/Stop amélioré === */
 .play-toggle {
@@ -484,6 +482,20 @@ button:active {
   opacity: 0;
   transform: scale(0.8);
   font-size: 22px;
+}
+
+.play-toggle:disabled {
+  background: #d1d1d6;   /* gris clair */
+  color: #8e8e93;        /* texte/icone gris */
+  cursor: not-allowed;   /* curseur barré */
+  box-shadow: none;
+  transform: none;
+  animation: none;       /* pas de pulse */
+}
+
+.play-toggle:disabled:hover {
+  transform: none;       /* pas d’effet hover */
+  box-shadow: none;
 }
 
 /* Quand on est en mode lecture */
