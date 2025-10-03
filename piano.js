@@ -140,6 +140,9 @@ function simulateKeyRelease(key) {
 }
 
 document.addEventListener("keydown", (e) => {
+  const active = document.activeElement;
+  if (active && (active.tagName === "INPUT" || active.tagName === "TEXTAREA")) return;
+
   const key = e.key.toLowerCase();
   const note = keys[key];
   if (note && isPlayed === undefined) {
@@ -162,6 +165,8 @@ document.addEventListener("keydown", (e) => {
 
 let pressStart = null;
 document.addEventListener("keyup", (e) => {
+  const active = document.activeElement;
+  if (active && (active.tagName === "INPUT" || active.tagName === "TEXTAREA")) return;
   const key = e.key.toLowerCase();
   const note = keys[key];
   if (note) {
@@ -216,15 +221,126 @@ function stop_enregistrement() {
   redCircle.style.display = "block";
 }
 
+// === Ajout d'un modal pour choisir le nom du fichier avant téléchargement ===
+
 function telechargement_enregistrement() {
-  const file = new File(record, "melody.txt", {
+  // Vérifie si le modal existe déjà, sinon le crée
+  let modal = document.getElementById("filenameModal");
+  if (!modal) {
+    modal = document.createElement("div");
+    modal.id = "filenameModal";
+    modal.style.position = "fixed";
+    modal.style.top = "0";
+    modal.style.left = "0";
+    modal.style.width = "100vw";
+    modal.style.height = "100vh";
+    modal.style.background = "rgba(0,0,0,0.35)";
+    modal.style.display = "flex";
+    modal.style.alignItems = "center";
+    modal.style.justifyContent = "center";
+    modal.style.zIndex = "9999";
+
+    // Contenu du modal
+    const box = document.createElement("div");
+    box.style.background = "#fff";
+    box.style.padding = "28px 24px 20px 24px";
+    box.style.borderRadius = "12px";
+    box.style.boxShadow = "0 4px 32px rgba(0,0,0,0.18)";
+    box.style.minWidth = "320px";
+    box.style.display = "flex";
+    box.style.flexDirection = "column";
+    box.style.alignItems = "stretch";
+    box.style.gap = "12px";
+
+    const label = document.createElement("label");
+    label.textContent = "Nom du fichier :";
+    label.style.fontWeight = "500";
+    label.setAttribute("for", "filenameInput");
+
+    const input = document.createElement("input");
+    input.type = "text";
+    input.id = "filenameInput";
+    input.value = "melody.txt";
+    input.style.fontSize = "16px";
+    input.style.padding = "8px";
+    input.style.border = "1px solid #ccc";
+    input.style.borderRadius = "6px";
+    input.style.marginBottom = "8px";
+
+    // Pour focus auto
+    setTimeout(() => input.focus(), 50);
+
+    const btnRow = document.createElement("div");
+    btnRow.style.display = "flex";
+    btnRow.style.justifyContent = "flex-end";
+    btnRow.style.gap = "10px";
+
+    const cancelBtn = document.createElement("button");
+    cancelBtn.textContent = "Annuler";
+    cancelBtn.style.background = "#f5f5f7";
+    cancelBtn.style.border = "none";
+    cancelBtn.style.padding = "8px 16px";
+    cancelBtn.style.borderRadius = "6px";
+    cancelBtn.style.cursor = "pointer";
+    cancelBtn.onclick = () => {
+      document.body.removeChild(modal);
+    };
+
+    const okBtn = document.createElement("button");
+    okBtn.textContent = "Télécharger";
+    okBtn.style.background = "#1d1d1f";
+    okBtn.style.color = "#fff";
+    okBtn.style.border = "none";
+    okBtn.style.padding = "8px 16px";
+    okBtn.style.borderRadius = "6px";
+    okBtn.style.cursor = "pointer";
+    okBtn.onclick = () => {
+      let filename = input.value.trim();
+      if (!filename) filename = "melody.txt";
+      if (!filename.toLowerCase().endsWith(".txt")) filename += ".txt";
+      telecharger_record_avec_nom(filename);
+      document.body.removeChild(modal);
+    };
+
+    // Entrée clavier: Enter = OK, Escape = Annuler
+    input.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        okBtn.click();
+      } else if (e.key === "Escape") {
+        cancelBtn.click();
+      }
+    });
+
+    btnRow.appendChild(cancelBtn);
+    btnRow.appendChild(okBtn);
+
+    box.appendChild(label);
+    box.appendChild(input);
+    box.appendChild(btnRow);
+
+    modal.appendChild(box);
+    document.body.appendChild(modal);
+  } else {
+    // Si déjà présent, le réaffiche (sécurité)
+    modal.style.display = "flex";
+    const input = modal.querySelector("#filenameInput");
+    if (input) {
+      input.value = "melody.txt";
+      setTimeout(() => input.focus(), 50);
+    }
+  }
+}
+
+// Fonction utilitaire pour télécharger le fichier avec le nom choisi
+function telecharger_record_avec_nom(filename) {
+  const file = new File(record, filename, {
     type: "text/plain",
   });
   const url = window.URL.createObjectURL(file);
 
   const link = document.createElement("a");
   link.href = url;
-  link.download = "melody.txt";
+  link.download = filename;
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
