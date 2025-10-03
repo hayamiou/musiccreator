@@ -180,10 +180,10 @@ class note {
       if (value.note !== "0") {
         const sampler = window.currentSampler;
         if (sampler && sampler.loaded) {
-          sampler.triggerAttackRelease(value.note, value.duration, time);
+          sampler.triggerAttackRelease(value.note, "1n", time);
         } else {
           const synthTmp = new Tone.Synth().toDestination();
-          synthTmp.triggerAttackRelease(value.note, value.duration, time);
+          synthTmp.triggerAttackRelease(value.note, "1n", time);
         }
       }
     }, events).start(0);

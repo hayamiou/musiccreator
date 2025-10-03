@@ -11,6 +11,7 @@ body {
   background: #f5f5f7;
   padding: 64px 24px;
   padding-top: calc(70px + 12px);
+  overflow: hidden;
 }
 
 .topbar {
@@ -434,7 +435,6 @@ button:active {
   border-width: 20px;
 }
 
-
 /* === Bouton Play/Stop amélioré === */
 .play-toggle {
   margin-top: 20px;
@@ -484,16 +484,16 @@ button:active {
 }
 
 .play-toggle:disabled {
-  background: #d1d1d6;   /* gris clair */
-  color: #8e8e93;        /* texte/icone gris */
-  cursor: not-allowed;   /* curseur barré */
+  background: #d1d1d6; /* gris clair */
+  color: #8e8e93; /* texte/icone gris */
+  cursor: not-allowed; /* curseur barré */
   box-shadow: none;
   transform: none;
-  animation: none;       /* pas de pulse */
+  animation: none; /* pas de pulse */
 }
 
 .play-toggle:disabled:hover {
-  transform: none;       /* pas d’effet hover */
+  transform: none; /* pas d’effet hover */
   box-shadow: none;
 }
 
