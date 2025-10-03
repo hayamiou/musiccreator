@@ -33,6 +33,15 @@ class note {
   const dropzone = document.getElementById("dropzone");
   const importFeedback = document.getElementById("importFeedback");
   
+  // === Play toggle bouton ===
+  const playToggle = document.getElementById("playToggle");
+  let isPlaying = false;
+  
+  // Au départ, le bouton est désactivé (déjà "disabled" dans le HTML)
+  if (playToggle) {
+    playToggle.disabled = true;
+  }
+  
   function closeImportDropdown() {
     if (importDropdown && importToggle) {
       importDropdown.classList.remove("open");
@@ -188,10 +197,7 @@ class note {
     }
   }
   
-  // === Nouveau bouton toggle Play/Stop ===
-  const playToggle = document.getElementById("playToggle");
-  let isPlaying = false;
-  
+  // === Gestion Play/Stop ===
   if (playToggle) {
     playToggle.addEventListener("click", async () => {
       await Tone.start();
@@ -212,6 +218,16 @@ class note {
   renderParsed = function (events, errors, filename) {
     parsedEvents = Array.isArray(events) ? events : [];
     _origRenderParsed(events, errors, filename);
+  
+    // Activer ou désactiver le bouton selon s’il y a des notes
+    if (playToggle) {
+      playToggle.disabled = parsedEvents.length === 0;
+      if (parsedEvents.length === 0) {
+        // reset état playing si on réimporte un fichier vide
+        playToggle.classList.remove("is-playing");
+        isPlaying = false;
+      }
+    }
   };
   
   function renderParsed(events, errors, filename) {
