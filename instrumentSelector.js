@@ -9,22 +9,19 @@ const sons = {
 
 const notes = ["A4", "B4", "C4", "D4"];
 
-
-
-
 // Sampler global (sera recréé quand on change d’instrument)
 let sampler;
 
 // Fonction pour créer un sampler pour l’instrument choisi
 async function createSampler(instrument) {
-    if (sampler) {
-        sampler.dispose();
-        sampler = null;
-    }
-    const mapping = SAMPLE_SOURCES[instrument] || SAMPLE_SOURCES.piano;
-    sampler = new Tone.Sampler(mapping).toDestination();
-    await Tone.loaded();
-    window.currentSampler = sampler;
+  if (sampler) {
+    sampler.dispose();
+    sampler = null;
+  }
+  const mapping = SAMPLE_SOURCES[instrument] || SAMPLE_SOURCES.piano;
+  sampler = new Tone.Sampler(mapping).toDestination();
+  await Tone.loaded();
+  window.currentSampler = sampler;
 }
 
 // Boutons des notes
@@ -67,4 +64,8 @@ document
 // Init avec instrument par défaut
 changerInstrument("violon");
 
-(function initExpose(){ window.currentSampler = sampler; })();
+(function initExpose() {
+  window.currentSampler = sampler;
+})();
+
+document.getElementById("pianoBtn").click();
